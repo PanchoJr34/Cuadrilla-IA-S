@@ -1,0 +1,23 @@
+export type AgentState = 'running' | 'done' | 'failed' | 'stopped'
+
+export type CuadrillaAgent = {
+  id: string
+  label: string
+  model: string
+  write: boolean
+  state: AgentState
+  doing: string
+  task: string
+  /** Solo en escritura: la rama y la carpeta aisladas donde trabaja. */
+  branch?: string
+  worktree?: string
+  report?: string
+  changed: string[]
+  problem?: string
+}
+
+declare module 'claude-code' {
+  interface PluginState {
+    cuadrilla: { agents: Shaped<CuadrillaAgent[]> }
+  }
+}

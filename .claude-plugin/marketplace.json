@@ -1,0 +1,6 @@
+{
+  "name": "cuadrilla",
+  "owner": { "name": "PanchoJr34", "url": "https://github.com/PanchoJr34" },
+  "description": "Cuadrilla de agentes de IA para Claude Code en Windows",
+  "plugins": [{ "name": "cuadrilla", "source": "./", "description": "Claude dirige y delega a Gemini (Antigravity CLI) en segundo plano" }]
+}

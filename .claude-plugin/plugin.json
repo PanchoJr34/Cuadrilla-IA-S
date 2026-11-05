@@ -1,0 +1,10 @@
+{
+  "name": "cuadrilla",
+  "version": "0.1.0",
+  "description": "Cuadrilla de agentes para Claude Code en Windows: Claude dirige y delega a Gemini (Antigravity CLI) en segundo plano, con solo lectura por defecto y una copia aislada por agente",
+  "author": { "name": "PanchoJr34", "url": "https://github.com/PanchoJr34" },
+  "homepage": "https://github.com/PanchoJr34/Cuadrilla-IA-S",
+  "repository": "https://github.com/PanchoJr34/Cuadrilla-IA-S",
+  "license": "MIT",
+  "types": "./types/index.d.ts"
+}
