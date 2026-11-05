@@ -33,7 +33,7 @@ Tú ─▶ Claude Code (dirige, decide e integra)
 
 - Windows 10 o 11.
 - [Claude Code](https://code.claude.com/docs/en/setup), con un plan que lo incluya y sesión iniciada.
-- [Git](https://git-scm.com/downloads/win).
+- [Git](https://git-scm.com/downloads/win), para que los agentes editen en copias aisladas.
 - Antigravity CLI (`agy`), con sesión iniciada en tu cuenta de Google.
 
 Para instalar Antigravity CLI en PowerShell:
@@ -52,21 +52,20 @@ Debe responder `"status":"SUCCESS"`.
 
 ## Instalación
 
-```powershell
-claude plugin marketplace add PanchoJr34/Cuadrilla-IA-S
-claude plugin install cuadrilla@cuadrilla
-```
+1. Baja este repositorio: botón **Code > Download ZIP**, o `git clone`.
+2. Extráelo en una carpeta fija, como `C:\Cuadrilla-IA-S`. No la borres: el plugin se carga desde ahí.
+3. Haz doble clic en `instalar.cmd`.
+4. Reinicia Claude Code y escribe `/cuadrilla`.
 
-Reinicia Claude Code y abre el panel con `/cuadrilla`. También puedes descargar y ejecutar [`instalar.cmd`](instalar.cmd), que revisa los requisitos.
+Si el doble clic solo muestra el texto del archivo, corre esto en PowerShell con tu ruta:
+
+```powershell
+cmd /c "C:\Cuadrilla-IA-S\instalar.cmd"
+```
 
 ### Actualizar
 
-Revisa antes los cambios del repositorio y luego corre:
-
-```powershell
-claude plugin marketplace update cuadrilla
-claude plugin update cuadrilla@cuadrilla
-```
+Reemplaza la carpeta por la versión nueva, en la misma ruta, y ejecuta otra vez `instalar.cmd`.
 
 ## Uso
 

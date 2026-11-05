@@ -10,14 +10,11 @@ if errorlevel 1 (
   goto :fin
 )
 where git >nul 2>nul
-if errorlevel 1 (
-  echo [ERROR] No encontre Git. Instalalo y abre una terminal nueva.
-  goto :fin
-)
+if errorlevel 1 echo [AVISO] No encontre Git. Lo necesitas para que los agentes editen en copias aisladas.
 where agy >nul 2>nul
 if errorlevel 1 echo [AVISO] No encontre "agy". Instala Antigravity CLI para delegar a Gemini.
 
-call claude plugin marketplace add PanchoJr34/Cuadrilla-IA-S
+call claude plugin marketplace add "%~dp0."
 if errorlevel 1 goto :fallo
 call claude plugin marketplace update cuadrilla
 if errorlevel 1 goto :fallo
