@@ -11,6 +11,7 @@ const setup = async ($: any, on: any, opts: { git?: (args: readonly string[]) =>
   const files: Record<string, string> = {}
   on('fs.write', (_: unknown, e: any) => { files[e.path] = e.content ?? e.text ?? e.data; return { value: undefined } as never })
   on('fs.exists', (_: unknown, e: any) => ({ value: e.path in files }) as never)
+  on('fs.list', (_: unknown, e: any) => ({ value: e.path?.endsWith('src') ? [{ name: 'b.ts', kind: 'file', size: 1, mtimeMs: 0, isLink: false }] : [{ name: 'a.ts', kind: 'file', size: 1, mtimeMs: 0, isLink: false }, { name: 'src', kind: 'dir', size: 0, mtimeMs: 0, isLink: false }, { name: 'node_modules', kind: 'dir', size: 0, mtimeMs: 0, isLink: false }] }) as never)
   on('fs.read', (_: unknown, e: any) => ({ value: files[e.path] }) as never)
   const git: (readonly string[])[] = []
   on('process.run', (_: unknown, e: any) => {
@@ -125,4 +126,20 @@ test('no pasa de tres agentes a la vez y el panel los muestra', async ($, on) =>
     await ui.unmount()
   }
   s.release(); await settle()
+})
+
+test('Gemini recibe la lista de Git', async ($, on) => {
+  const s = await setup($, on, { git: a => ({ exitCode: 0, stdout: a[1] === 'ls-files' ? 'src/app.ts\nREADME.md\n' : '', stderr: '' }) })
+  await $.tool.call({ tool: TOOL, task: 'Revisa' })
+  await settle(); s.release(); await settle()
+  expect(s.spawned[0].argv[2]).toContain('src/app.ts\nREADME.md')
+})
+
+test('fuera de un repositorio recorre carpetas y salta node_modules', async ($, on) => {
+  const s = await setup($, on, { git: () => ({ exitCode: 128, stdout: '', stderr: 'not a git repository' }) })
+  await $.tool.call({ tool: TOOL, task: 'Revisa' })
+  await settle(); s.release(); await settle()
+  const prompt = s.spawned[0].argv[2]
+  expect(prompt).toContain('a.ts\nsrc/b.ts')
+  expect(prompt).not.toContain('node_modules/')
 })

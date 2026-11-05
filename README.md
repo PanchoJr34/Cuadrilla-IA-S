@@ -2,7 +2,7 @@
 
 **Tu cuadrilla de agentes de IA para Claude Code en Windows.** Claude dirige el trabajo y delega en Gemini en segundo plano, para que gastes menos de tus límites y sigas en control de cada cambio.
 
-> **Estado: versión 0.1.1, en pruebas.** Pasa sus pruebas automáticas con procesos simulados, pero todavía falta confirmar el flujo completo en Windows.
+> **Estado: versión 0.1.2, en pruebas.** Pasa sus pruebas automáticas con procesos simulados, pero todavía falta confirmar el flujo completo en Windows.
 
 ## Por qué existe
 
@@ -80,6 +80,10 @@ Delega a Gemini, con escritura aislada, agregar pruebas al módulo de login. Cua
 ```
 
 Los informes quedan en `.cuadrilla/reports/` y las copias aisladas en `.cuadrilla/worktrees/`. Esa carpeta tiene su propio `.gitignore`, así que no entra en tus commits.
+
+## Qué puede hacer Gemini
+
+Gemini recibe la lista de archivos del proyecto (hasta 300) y los lee con `read_file`. En modo solo lectura no ejecuta comandos, así que no corre pruebas, no compila y no busca en la web.
 
 ## Seguridad y privacidad
 
