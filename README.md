@@ -4,7 +4,7 @@
 
 **Tu equipo de agentes de Claude y Gemini para crear, mejorar y lanzar productos web.**
 
-Plugin para Claude Code en Windows · 16 agentes · 47 skills · Sin WSL
+Plugin para Claude Code en Windows · 15 agentes · 47 skills · Sin WSL
 
 [Empezar](#empezar-en-10-minutos) · [Cómo funciona](#cómo-funciona) · [Prompts](docs/prompts.md) · [Privacidad](PRIVACIDAD.md)
 
