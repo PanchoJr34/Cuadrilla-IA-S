@@ -50,6 +50,7 @@ test('una tarea de solo lectura corre sin shell ni saltarse permisos', async ($,
   const argv = s.spawned[0].argv
   expect(argv[0]).toBe('agy')
   expect(argv[2]).toContain('Lee\nel "repo"')
+  expect(argv[2]).toContain('No ejecutes comandos de terminal')
   expect(argv.join(' ')).not.toContain('dangerously')
   expect(argv).not.toContain('accept-edits')
   expect(s.spawned[0].cwd).toBe('C:/Proyectos/app')

@@ -2,7 +2,7 @@
 
 **Tu cuadrilla de agentes de IA para Claude Code en Windows.** Claude dirige el trabajo y delega en Gemini en segundo plano, para que gastes menos de tus límites y sigas en control de cada cambio.
 
-> **Estado: versión 0.1.0, en pruebas.** Pasa sus pruebas automáticas con procesos simulados, pero todavía falta confirmar el flujo completo en Windows.
+> **Estado: versión 0.1.1, en pruebas.** Pasa sus pruebas automáticas con procesos simulados, pero todavía falta confirmar el flujo completo en Windows.
 
 ## Por qué existe
 
@@ -11,7 +11,7 @@ Otras herramientas de agentes están pensadas para macOS o Linux. Cuadrilla nace
 | Función | Qué hace |
 | --- | --- |
 | Agentes en segundo plano | Sigues trabajando con Claude mientras Gemini avanza. Hasta 3 a la vez. |
-| Solo lectura por defecto | Si un agente de solo lectura cambia archivos, la tarea se marca como fallida. |
+| Solo lectura por defecto | Se le indica al agente no cambiar nada, y en un repositorio Git la tarea falla si detecta cambios. |
 | Escritura aislada | Con `write: true`, cada agente trabaja en su propia rama y carpeta. Nada toca tu proyecto hasta que lo revises. |
 | Sin saltarse permisos | Nunca usa `--dangerously-skip-permissions`. Lo que necesita aprobación se niega y queda en el informe. |
 | Informes como datos | Lo que devuelve un agente no se trata como instrucciones. |
@@ -97,6 +97,7 @@ Los informes quedan en `.cuadrilla/reports/` y las copias aisladas en `.cuadrill
 | No se reconoce `claude` o `agy` | Abre una terminal nueva y revisa que su carpeta esté en el PATH. |
 | No se pudo iniciar agy | Corre `agy --version` en una terminal nueva y reinicia Claude Code. |
 | `write: true` necesita Git | Trabaja dentro de un repositorio con al menos un commit. |
+| Una tarea termina sin informe | Gemini intentó un comando de terminal y se le negó. Vuelve a lanzarla pidiendo usar solo sus herramientas de lectura. |
 | Una tarea termina sin cambios | Abre su informe: pudo faltarle una aprobación. |
 
 ## Hoja de ruta
