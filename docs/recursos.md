@@ -1,9 +1,10 @@
 # Catálogo de recursos
 
-Selección basada en [Pablo in Public](https://pabloinpublic.com/recursos). Son enlaces y notas propias: el contenido sigue siendo de sus autores.
+Selección basada en [Pablo in Public](https://pabloinpublic.com/recursos). Son enlaces y notas propias: el contenido sigue siendo de sus autores. Se leyeron 33 páginas; las de noticias, otros modelos y otros sistemas de agentes se clasificaron por su resumen.
 
 - **Incluido:** está en Cuadrilla con copia fija o como función propia.
 - **Referencia:** vale la pena consultarlo, pero no se instala.
+- **Inspiración:** la idea influyó en algo propio, sin copiar su texto.
 - **Excluido:** no entra por riesgo, costo o porque no aporta a web, diseño y marketing.
 
 | Recurso | Estado | Nota |
@@ -11,22 +12,22 @@ Selección basada en [Pablo in Public](https://pabloinpublic.com/recursos). Son 
 | [Plugin4Shell](https://pabloinpublic.com/recursos/plugin4shell) | Incluido | Por esto usamos copias fijas y no autoactualizaciones de terceros. |
 | [Lista de 17 skills](https://pabloinpublic.com/recursos/lista-17-skills) | Incluido en parte | Humanizer, agent-skills y make-interfaces-feel-better. |
 | [Skills de animación](https://pabloinpublic.com/recursos/skills-animacion) | Incluido | Selección de Emil Kowalski. |
-| [Skills de diseño](https://pabloinpublic.com/recursos/skills-diseno-claude-code) | Incluido en parte | Taste Skill. Impeccable no, porque depende de su propia CLI. |
+| [Skills de diseño](https://pabloinpublic.com/recursos/skills-diseno-claude-code) | Referencia | Taste Skill e Impeccable requieren scripts o su propia herramienta. Emil Kowalski sí se incluye. |
 | [security-guidance](https://pabloinpublic.com/recursos/security-guidance-claude-code) | Incluido | Lo instala `instalar.cmd`. |
-| [Deuda de instrucciones](https://pabloinpublic.com/recursos/deuda-instrucciones) | Incluido | Idea llevada a la skill propia `auditar-setup`. |
+| [Deuda de instrucciones](https://pabloinpublic.com/recursos/deuda-instrucciones) | Inspiración | `auditar-setup` tiene un objetivo parecido, con texto propio. El prompt original es de @Av1dlive. |
 | [ECC](https://pabloinpublic.com/recursos/ecc-everything-claude-code) | Referencia | Se evita instalar todo el paquete. |
-| [Plantilla de subagent](https://pabloinpublic.com/recursos/plantilla-subagent) | Incluido | Idea aplicada en `agents/`. |
-| [Claude Agents como plugins](https://pabloinpublic.com/recursos/claude-agentes-plugin) | Incluido | Idea aplicada en la estructura. |
-| [Foco: una petición, un objetivo](https://pabloinpublic.com/recursos/foco-una-peticion-un-objetivo) | Incluido | Idea aplicada en `equipo-web`. |
+| [Plantilla de subagent](https://pabloinpublic.com/recursos/plantilla-subagent) | Inspiración | Se aplicó el criterio de herramientas mínimas en `agents/`. |
+| [Claude Agents como plugins](https://pabloinpublic.com/recursos/claude-agentes-plugin) | Referencia | Cuadrilla usa el sistema de plugins actual; sus comandos pueden diferir. |
+| [Foco: una petición, un objetivo](https://pabloinpublic.com/recursos/foco-una-peticion-un-objetivo) | Inspiración | Regla aplicada en `equipo-web`. |
 | [Agent harness](https://pabloinpublic.com/recursos/agent-harness) | Referencia | Conceptos de diseño. |
-| [Graph engineering](https://pabloinpublic.com/recursos/graph-engineering) | Referencia | Idea para flujos futuros. |
+| [Graph engineering](https://pabloinpublic.com/recursos/graph-engineering) | Inspiración | La regla de paralelizar solo sin dependencia está en `equipo-web`. |
 | [LLM Council](https://pabloinpublic.com/recursos/llm-council) | Referencia | Idea para revisión cruzada. |
 | [Spec-Kit](https://pabloinpublic.com/recursos/spec-kit) | Referencia | Se cubre en parte con `planning-and-task-breakdown`. |
 | [HTML como output](https://pabloinpublic.com/recursos/html-output-claude-code) | Referencia | Útil para entregables. |
 | [HyperFrames](https://pabloinpublic.com/recursos/hyperframes-prompts) | Referencia | Motion graphics. |
-| [Pack de contexto](https://pabloinpublic.com/recursos/plantillas-contexto-claude) | Referencia | Plantillas de proyecto. |
-| [Entender código ajeno](https://pabloinpublic.com/recursos/entender-codigo-ajeno) | Referencia | Prompts. |
-| [Auditoría de base de datos](https://pabloinpublic.com/recursos/auditoria-base-datos) | Referencia | Prompt para rendimiento. |
+| [Pack de contexto](https://pabloinpublic.com/recursos/plantillas-contexto-claude) | Inspiración | Skill propia `contexto-proyecto`. |
+| [Entender código ajeno](https://pabloinpublic.com/recursos/entender-codigo-ajeno) | Inspiración | Skill propia `entender-codigo`. |
+| [Auditoría de base de datos](https://pabloinpublic.com/recursos/auditoria-base-datos) | Inspiración | Skill propia `auditoria-base-datos`. |
 | [Hooks de Claude Code](https://pabloinpublic.com/recursos/hooks-claude-code) | Referencia | Configuración personal. |
 | [Permisos](https://pabloinpublic.com/recursos/permisos-claude-code) | Referencia | Configuración personal. |
 | [Claude Code RESET](https://pabloinpublic.com/recursos/claude-code-reset) | Referencia | Hábitos de sesión. |

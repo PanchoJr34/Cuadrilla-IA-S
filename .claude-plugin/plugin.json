@@ -1,10 +1,24 @@
 {
   "name": "cuadrilla",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "description": "Agentes y skills de desarrollo web, diseño y marketing para Claude Code en Windows, con delegación a Gemini en segundo plano",
-  "author": { "name": "PanchoJr34", "url": "https://github.com/PanchoJr34" },
+  "author": {
+    "name": "PanchoJr34",
+    "url": "https://github.com/PanchoJr34"
+  },
   "homepage": "https://github.com/PanchoJr34/Cuadrilla-IA-S",
   "repository": "https://github.com/PanchoJr34/Cuadrilla-IA-S",
   "license": "MIT",
-  "types": "./types/index.d.ts"
+  "types": "./types/index.d.ts",
+  "keywords": [
+    "claude-code",
+    "gemini",
+    "antigravity",
+    "multi-agent",
+    "web-development",
+    "seo",
+    "marketing",
+    "ui-design",
+    "windows"
+  ]
 }
