@@ -343,8 +343,8 @@ Los plugins oficiales se quitan aparte con `claude plugin uninstall <plugin>@<ma
 | --- | --- |
 | Delegación, solo lectura y copia aislada | Probado en Windows |
 | Equipo mixto con Gemini y Claude | Probado en Windows |
+| Panel y agentes `gemini-*` en terminal | Probado en Windows |
 | Plugins oficiales | Instalación probada en Linux |
-| Agentes de Gemini `gemini-*` y panel nuevo | Falta probar en Windows |
 | VS Code y app de escritorio | Falta probar en Windows |
 
 ## Problemas comunes

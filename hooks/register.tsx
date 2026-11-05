@@ -94,7 +94,7 @@ const patch = ($: EngineInterface, id: string, change: Partial<CuadrillaAgent>) 
 
 const showStatus = async ($: EngineInterface) => {
   const running = (await read($, agents)).filter(a => a.state === 'running').length
-  $.ui.status(running > 0 ? `cuadrilla: ${running} trabajando` : undefined)
+  $.ui.status(running > 0 ? `${running} trabajando` : undefined)
 }
 
 const argvFor = (input: DelegateInput, prompt: string) => [
