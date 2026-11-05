@@ -2,20 +2,29 @@
 
 **Tu cuadrilla de agentes de IA para Claude Code en Windows.** Claude dirige el trabajo y delega en Gemini en segundo plano, para que gastes menos de tus límites y sigas en control de cada cambio.
 
-> **Estado: versión 0.1.2, en pruebas.** Pasa sus pruebas automáticas con procesos simulados, pero todavía falta confirmar el flujo completo en Windows.
+> **Estado: versión 0.2.0.** Delegación de lectura y escritura aislada probadas en Windows con la versión 0.1.2. Falta probar los agentes, las skills y Gemini de esta versión.
 
-## Por qué existe
+## Qué incluye
 
-Otras herramientas de agentes están pensadas para macOS o Linux. Cuadrilla nace para Windows: lanza los agentes directamente, sin zsh ni WSL.
-
-| Función | Qué hace |
+| Área | Contenido |
 | --- | --- |
-| Agentes en segundo plano | Sigues trabajando con Claude mientras Gemini avanza. Hasta 3 a la vez. |
-| Solo lectura por defecto | Se le indica al agente no cambiar nada, y en un repositorio Git la tarea falla si detecta cambios. |
-| Escritura aislada | Con `write: true`, cada agente trabaja en su propia rama y carpeta. Nada toca tu proyecto hasta que lo revises. |
-| Sin saltarse permisos | Nunca usa `--dangerously-skip-permissions`. Lo que necesita aprobación se niega y queda en el informe. |
-| Informes como datos | Lo que devuelve un agente no se trata como instrucciones. |
-| Panel | `/cuadrilla` muestra qué hace cada agente. |
+| Agentes | `arquitecto-web`, `frontend`, `disenador-ui`, `seo-marketing`, `copywriter`, `qa-web`, `revisor-seguridad` |
+| Skills propias | `equipo-web`, `auditoria-sitio`, `landing-completa`, `auditar-setup` |
+| Desarrollo web | Frontend, APIs, rendimiento, seguridad, revisión, pruebas y lanzamiento |
+| Diseño | Dirección visual, animación, microinteracciones y elección de librerías |
+| Marketing | Copy, SEO, SEO para IA, schema, conversión, analítica, contenido, correos, redes y precios |
+| Gemini | Delegación en segundo plano y las mismas skills en Antigravity |
+| Panel | `/cuadrilla` muestra agentes y límites de uso |
+
+Son 45 skills. Las de terceros están copiadas como Markdown en versiones fijas, sin scripts. Las fuentes y licencias están en [`third_party/`](third_party/SOURCES.md), y el catálogo de recursos en [`docs/recursos.md`](docs/recursos.md).
+
+### Seguridad del agente
+
+- Gemini corre sin saltarse permisos ni terminal.
+- En solo lectura, si detecta cambios en un repositorio Git, la tarea falla. Eso detecta el cambio, pero no garantiza impedirlo.
+- Con `write: true`, cada agente usa su propia rama y carpeta.
+- Los informes se tratan como datos, no como instrucciones.
+- Las skills de terceros no se actualizan solas.
 
 ## Cómo funciona
 
@@ -52,31 +61,38 @@ Debe responder `"status":"SUCCESS"`.
 
 ## Instalación
 
-1. Baja este repositorio: botón **Code > Download ZIP**, o `git clone`.
-2. Extráelo en una carpeta fija, como `C:\Cuadrilla-IA-S`. No la borres: el plugin se carga desde ahí.
-3. Haz doble clic en `instalar.cmd`.
-4. Reinicia Claude Code y escribe `/cuadrilla`.
-
-Si el doble clic solo muestra el texto del archivo, corre esto en PowerShell con tu ruta:
+En PowerShell:
 
 ```powershell
-cmd /c "C:\Cuadrilla-IA-S\instalar.cmd"
+git clone https://github.com/PanchoJr34/Cuadrilla-IA-S.git "$HOME\Cuadrilla-IA-S"; cmd /c "$HOME\Cuadrilla-IA-S\instalar.cmd"
 ```
+
+Esto instala Cuadrilla para tu usuario de Claude Code, añade `security-guidance` y, si tienes `agy`, instala las skills en Antigravity. No borres la carpeta `Cuadrilla-IA-S`.
+
+Reinicia Claude Code y escribe `/cuadrilla`. Funciona en sesiones locales de terminal, de la extensión de VS Code y de la app de escritorio.
 
 ### Actualizar
 
-Reemplaza la carpeta por la versión nueva, en la misma ruta, y ejecuta otra vez `instalar.cmd`.
+```powershell
+git -C "$HOME\Cuadrilla-IA-S" pull; cmd /c "$HOME\Cuadrilla-IA-S\instalar.cmd"
+```
+
+Revisa antes qué cambió en el repositorio.
 
 ## Uso
 
-Abre Claude Code en la carpeta de tu proyecto y pídeselo con tus palabras:
+Pídeselo a Claude con tus palabras:
 
 ```text
-Delega a Gemini una tarea de solo lectura: revisa este repo y dame los riesgos principales.
+Usa la cuadrilla para auditar este sitio y dame un plan priorizado.
 ```
 
 ```text
-Delega a Gemini, con escritura aislada, agregar pruebas al módulo de login. Cuando termine, revisa sus cambios conmigo.
+Crea una landing para este servicio con el equipo web. Antes de empezar, dime el plan.
+```
+
+```text
+Delega a Gemini revisar este repo en solo lectura y dame los riesgos.
 ```
 
 Los informes quedan en `.cuadrilla/reports/` y las copias aisladas en `.cuadrilla/worktrees/`. Esa carpeta tiene su propio `.gitignore`, así que no entra en tus commits.
@@ -106,11 +122,9 @@ Gemini recibe la lista de archivos del proyecto (hasta 300) y los lee con `read_
 
 ## Hoja de ruta
 
-- [ ] Confirmar el flujo completo en Windows
+- [ ] Probar agentes y skills de la versión 0.2.0 en Windows
 - [ ] Integrar cambios aprobados desde el panel
-- [ ] Limpiar copias aisladas terminadas
 - [ ] Revisión cruzada automática
-- [ ] Perfiles de agentes por tipo de tarea
 - [ ] Más proveedores opcionales
 
 ## Desarrollo
@@ -128,4 +142,4 @@ claude --plugin-dir .
 
 ## Créditos y licencia
 
-Publicado bajo licencia [MIT](LICENSE). El formato de salida de `agy` se tomó como referencia de [orchestra](https://github.com/TheAlejo160/orchestra), también MIT.
+El código propio se publica bajo licencia [MIT](LICENSE). Las skills de terceros conservan su autoría y licencia en [`third_party/`](third_party/SOURCES.md). Parte del formato de salida de `agy` y el panel de uso se basan en [orchestra](https://github.com/TheAlejo160/orchestra) (MIT).

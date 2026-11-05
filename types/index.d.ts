@@ -16,8 +16,10 @@ export type CuadrillaAgent = {
   problem?: string
 }
 
+export type CuadrillaLimit = { kind: string; percentUsed: number; resetsAt?: string }
+
 declare module 'claude-code' {
   interface PluginState {
-    cuadrilla: { agents: Shaped<CuadrillaAgent[]> }
+    cuadrilla: { agents: Shaped<CuadrillaAgent[]>; limits: Shaped<CuadrillaLimit[]> }
   }
 }

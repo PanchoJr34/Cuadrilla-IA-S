@@ -22,6 +22,16 @@ call claude plugin install cuadrilla@cuadrilla
 if errorlevel 1 goto :fallo
 call claude plugin update cuadrilla@cuadrilla
 if errorlevel 1 goto :fallo
+call claude plugin install security-guidance@claude-plugins-official
+if errorlevel 1 echo [AVISO] No se pudo instalar security-guidance. Cuadrilla sigue funcionando.
+
+where agy >nul 2>nul
+if errorlevel 1 goto :resumen
+call agy plugin uninstall cuadrilla >nul 2>nul
+call agy plugin install "%~dp0."
+if errorlevel 1 echo [AVISO] No se pudo instalar Cuadrilla en Antigravity. Claude si quedo instalado.
+
+:resumen
 echo.
 call claude plugin list
 echo.

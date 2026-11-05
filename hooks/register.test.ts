@@ -33,6 +33,7 @@ const setup = async ($: any, on: any, opts: { git?: (args: readonly string[]) =>
   on('prompt.submit', (_: unknown, e: any) => { submitted.push(e.text); return { text: e.text } as never })
   for (const name of ['tool.register', 'command.register']) on(name, () => ({ value: undefined }) as never)
   on('ui.open', () => ({ value: { isPlaced: true } }) as never)
+  on('session.usage', () => ({ value: { rateLimits: [{ kind: 'five_hour', percentUsed: 48 }], context: { window: 200_000 } } }) as never)
   on('session.cwd', () => ({ value: 'C:\\Proyectos\\app' }) as never)
   on('session.start', () => ({ cwd: 'C:\\Proyectos\\app' }) as never)
   await $.session.start({ source: 'startup', cwd: 'C:\\Proyectos\\app' } as never)
@@ -123,6 +124,7 @@ test('no pasa de tres agentes a la vez y el panel los muestra', async ($, on) =>
   for (const surface of ['terminal', 'desktop'] as const) {
     const ui = await $.ui.mount({ plugin: 'cuadrilla', component: 'Pane', requestId: 'cuadrilla', surface, props: { title: 'Cuadrilla', isFocused: false, bodyColumns: 60, placement: 'dock', scroll: { offset: 0, bodyRows: 30 }, view: {} } } as never)
     expect(await ui.find({ type: 'Text', text: /3 de 3 trabajando/ })).toBeDefined()
+    expect(await ui.find({ type: 'Text', text: /5 h: 48% usado/ })).toBeDefined()
     await ui.unmount()
   }
   s.release(); await settle()
@@ -142,4 +144,14 @@ test('fuera de un repositorio recorre carpetas y salta node_modules', async ($, 
   const prompt = s.spawned[0].argv[2]
   expect(prompt).toContain('a.ts\nsrc/b.ts')
   expect(prompt).not.toContain('node_modules/')
+})
+
+test('descartar borra solo una copia terminada', async ($, on) => {
+  const s = await setup($, on)
+  const id = idOf((await $.tool.call({ tool: TOOL, task: 'Edita', write: true })).result)
+  expect(String((await $.tool.call({ tool: TOOL, action: 'discard', id })).result)).toContain('sigue trabajando')
+  s.release(); await settle()
+  expect(String((await $.tool.call({ tool: TOOL, action: 'discard', id })).result)).toContain('descartada')
+  expect(s.git.some(a => a.includes('remove') && a.includes('--force'))).toBe(true)
+  expect(s.git.some(a => a.includes('-D') && a.includes(`cuadrilla/${id}`))).toBe(true)
 })
