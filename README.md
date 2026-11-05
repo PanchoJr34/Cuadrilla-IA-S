@@ -105,7 +105,7 @@ Si abre una ventana, elige **Sign in with your browser** y autoriza. Debe mostra
 git clone https://github.com/PanchoJr34/Cuadrilla-IA-S.git "$HOME\Cuadrilla-IA-S"; cmd /c "$HOME\Cuadrilla-IA-S\instalar.cmd"
 ```
 
-El instalador agrega Cuadrilla, los plugins oficiales y el equipo Gemini. No borres esa carpeta.
+El instalador agrega Cuadrilla y el equipo Gemini, y te pregunta si quieres sumar los plugins oficiales. No borres esa carpeta.
 
 ### 5. Pruébala
 
@@ -165,6 +165,16 @@ Decide, usa herramientas, ejecuta y prueba.
 | `qa-web` | Pruebas | Ejecuta, no edita |
 | `revisor-seguridad` | Seguridad y calidad | Lectura |
 
+## Usar lo que hizo Gemini
+
+Cuando Gemini edita, trabaja en una copia aparte y no toca tu proyecto. Al terminar:
+
+1. Pide a Claude: `Muéstrame los archivos que cambió y el diff`.
+2. Si te convence: `Integra estos cambios en mi proyecto y pruébalos`.
+3. Si no: `Descarta esa copia aislada`.
+
+La escritura solo funciona con `gemini-frontend`, `gemini-disenador-ui`, `gemini-copywriter` y `gemini-documentador`.
+
 ## Prompts recomendados
 
 Usa esta estructura para que el equipo entienda mejor:
@@ -198,7 +208,7 @@ Pueden sumar gasto de contexto y algunos usan hooks o conectores. Desactiva los 
 
 ### Skills
 
-Disponibles para Claude y Gemini. Las de terceros son copias fijas en Markdown, sin scripts.
+Disponibles para Claude y Gemini. Las de terceros son copias fijas en Markdown, sin scripts. `pick-ui-library`, `prototype` y `review-animations` solo corren si las pides por nombre.
 
 <details>
 <summary><strong>Flujos de Cuadrilla</strong></summary>
@@ -296,6 +306,7 @@ Cuadrilla-IA-S/
 │   ├── agents/        Agentes de Gemini
 │   └── plugin.json    Manifiesto para Antigravity
 ├── skills/            Skills compartidas
+├── references/        Listas de revisión de las skills
 ├── hooks/             Delegación, panel y pruebas
 ├── docs/
 │   ├── prompts.md     Prompts listos para usar

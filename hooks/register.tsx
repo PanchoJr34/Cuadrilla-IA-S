@@ -28,7 +28,8 @@ const GEMINI_ROLES: Record<string, string> = {
   'gemini-revisor': 'Revisor',
   'gemini-documentador': 'Documentador',
 }
-const SECRET_FILE = /(^|\/)(\.env(\..*)?|.*\.(pem|key|pfx|p12)|id_(rsa|ed25519)(\.pub)?|credentials(\.json)?|secrets?\.(json|ya?ml))$/i
+const WRITE_ROLES = ['gemini-frontend', 'gemini-disenador-ui', 'gemini-copywriter', 'gemini-documentador']
+const SECRET_FILE = /(^|\/)(\.env(\..*)?|\.npmrc|\.netrc|\.pypirc|.*\.(pem|key|pfx|p12|jks|keystore)|id_(rsa|ed25519)(\.pub)?|credentials(\.json)?|secrets?\.(json|ya?ml)|.*service[-_]?account.*\.json)$/i
 const SKIP_DIRS = new Set(['.git', '.cuadrilla', '.orchestra', 'node_modules', 'dist', 'build', 'out', 'bin', 'obj', 'target', '.next', '.venv', 'venv', '__pycache__', '.gradle', '.idea', '.vs'])
 
 const agents = atom({ plugin: 'cuadrilla', key: 'agents' } as const, [], { shape: 'agents-1' })
@@ -124,7 +125,7 @@ ${fitFiles(input, files).join('\n') || '(ninguno encontrado)'}
 Termina con un informe de máximo 10 líneas: qué hiciste, cómo lo comprobaste y qué quedó pendiente o riesgoso.`
 
 const fitFiles = (input: DelegateInput, files: string[]) => {
-  const room = MAX_PROMPT - (input.task?.length ?? 0) - 1500
+  const room = MAX_PROMPT - (input.task?.length ?? 0) - (input.skills?.join(', ').length ?? 0) - 1500
   const fit: string[] = []
   let used = 0
   for (const file of files) {
@@ -170,7 +171,10 @@ const changedFiles = async ($: EngineInterface, cwd: string) => {
     const entry = entries[i] ?? ''
     files.push(entry.slice(3))
     // Un renombrado o copia trae después la ruta original.
-    if (/^[RC]/.test(entry)) i++
+    if (/^[RC]/.test(entry)) {
+      i++
+      if (entries[i]) files.push(entries[i] as string)
+    }
   }
   return files
 }
@@ -225,6 +229,8 @@ const runAgent = async ($: EngineInterface, id: string, input: DelegateInput, pr
     const it = child[Symbol.asyncIterator]()
     const startedAt = await $.clock.now()
     running.set(id, { startedAt, lastAt: startedAt, stop: () => void it.return?.(undefined as never).catch(() => {}) })
+    // Una orden de detener pudo llegar mientras el proceso arrancaba.
+    if (stopReasons.has(id)) running.get(id)?.stop()
     for (;;) {
       const step = await it.next()
       if (step.done) {
@@ -310,6 +316,7 @@ const startNow = async ($: EngineInterface, input: DelegateInput) => {
   if (input.model !== undefined && !/^[A-Za-z0-9][\w.:/-]{0,80}$/.test(input.model)) return { result: 'Error: "model" no es válido.' }
   if (input.effort !== undefined && !EFFORTS.includes(input.effort)) return { result: 'Error: "effort" no es válido.' }
   if (input.role !== undefined && GEMINI_ROLES[input.role] === undefined) return { result: `Error: "role" debe ser uno de: ${Object.keys(GEMINI_ROLES).join(', ')}.` }
+  if (input.write === true && !WRITE_ROLES.includes(input.role ?? '')) return { result: `Error: write: true necesita uno de estos roles: ${WRITE_ROLES.join(', ')}.` }
   if ((input.skills ?? []).some(x => !/^[a-z0-9-]{1,60}$/.test(x))) return { result: 'Error: "skills" no es válido.' }
   if (task.length > MAX_TASK) return { result: `Error: la tarea pasa de ${MAX_TASK} caracteres. Acórtala o pide leer un archivo.` }
   const list = await read($, agents)

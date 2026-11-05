@@ -10,3 +10,5 @@ Copias fijas: solo Markdown, sin scripts. Para actualizar, revisa el cambio de o
 | https://github.com/addyosmani/agent-skills | `301b02b12bff` | frontend-ui-engineering, api-and-interface-design, performance-optimization, security-and-hardening, code-review-and-quality, browser-testing-with-devtools, shipping-and-launch, planning-and-task-breakdown, debugging-and-error-recovery |
 | https://github.com/coreyhaines31/marketingskills | `88c79f6528a9` | copywriting, copy-editing, seo-audit, ai-seo, schema, site-architecture, cro, signup, content-strategy, marketing-plan, marketing-psychology, product-marketing, analytics, emails, social, launch, pricing, customer-research |
 | https://github.com/blader/humanizer | `0ef9fe5bc357` | humanizer |
+
+Las listas de `references/` provienen de `addyosmani/agent-skills`.

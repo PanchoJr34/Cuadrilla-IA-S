@@ -83,7 +83,7 @@ test('un informe no puede cerrar su propia etiqueta', async ($, on) => {
 
 test('escritura usa rama y carpeta aisladas', async ($, on) => {
   const s = await setup($, on, { git: a => ({ exitCode: 0, stdout: a[3] === 'status' ? ' M src/a.ts\0' : '', stderr: '' }) })
-  const id = idOf((await $.tool.call({ tool: TOOL, task: 'Edita', write: true })).result)
+  const id = idOf((await $.tool.call({ tool: TOOL, task: 'Edita', write: true, role: 'gemini-frontend' })).result)
   s.release(); await settle()
   expect(s.git.some(a => a.includes('worktree') && a.includes('add'))).toBe(true)
   expect(s.spawned[0].cwd).toBe(`C:/Proyectos/app/.cuadrilla/worktrees/${id}`)
@@ -95,7 +95,7 @@ test('escritura usa rama y carpeta aisladas', async ($, on) => {
 
 test('sin repositorio, escritura se niega y no lanza nada', async ($, on) => {
   const s = await setup($, on, { git: () => ({ exitCode: 128, stdout: '', stderr: 'not a git repository' }) })
-  const out = String((await $.tool.call({ tool: TOOL, task: 'Edita', write: true })).result)
+  const out = String((await $.tool.call({ tool: TOOL, task: 'Edita', write: true, role: 'gemini-frontend' })).result)
   expect(out).toContain('necesita Git')
   expect(s.spawned).toHaveLength(0)
 })
@@ -150,7 +150,7 @@ test('fuera de un repositorio recorre carpetas y salta node_modules', async ($, 
 
 test('descartar borra solo una copia terminada', async ($, on) => {
   const s = await setup($, on)
-  const id = idOf((await $.tool.call({ tool: TOOL, task: 'Edita', write: true })).result)
+  const id = idOf((await $.tool.call({ tool: TOOL, task: 'Edita', write: true, role: 'gemini-frontend' })).result)
   expect(String((await $.tool.call({ tool: TOOL, action: 'discard', id })).result)).toContain('sigue trabajando')
   s.release(); await settle()
   expect(String((await $.tool.call({ tool: TOOL, action: 'discard', id })).result)).toContain('descartada')
@@ -203,4 +203,49 @@ test('lanza un agente de Gemini con su rol y rechaza roles desconocidos', async 
   await $.tool.call({ tool: TOOL, task: 'Audita', role: 'gemini-auditor-web' })
   await settle(); s.release(); await settle()
   expect(s.spawned[0].argv).toContain('--agent=gemini-auditor-web')
+})
+
+test('escritura exige un rol que pueda escribir', async ($, on) => {
+  const s = await setup($, on)
+  expect(String((await $.tool.call({ tool: TOOL, task: 'x', write: true })).result)).toContain('necesita uno de estos roles')
+  expect(String((await $.tool.call({ tool: TOOL, task: 'x', write: true, role: 'gemini-revisor' })).result)).toContain('necesita uno de estos roles')
+  expect(s.spawned).toHaveLength(0)
+})
+
+test('filtra más archivos de secretos', async ($, on) => {
+  const s = await setup($, on, { git: a => ({ exitCode: 0, stdout: a[3] === 'ls-files' ? 'app.ts\n.npmrc\n.netrc\nandroid/release.jks\nfirebase-service-account.json\n' : '', stderr: '' }) })
+  await $.tool.call({ tool: TOOL, task: 'Revisa' })
+  await settle(); s.release(); await settle()
+  const prompt = s.spawned[0].argv[2]
+  for (const secret of ['.npmrc', '.netrc', 'release.jks', 'service-account']) expect(prompt).not.toContain(secret)
+})
+
+test('detener y listar agentes', async ($, on) => {
+  const s = await setup($, on)
+  const id = idOf((await $.tool.call({ tool: TOOL, task: 'Lee', label: 'lector' })).result)
+  await settle()
+  expect(String((await $.tool.call({ tool: TOOL, action: 'list' })).result)).toContain('lector')
+  expect(String((await $.tool.call({ tool: TOOL, action: 'stop', id })).result)).toContain('Deteniendo')
+  s.release(); await settle()
+  expect(s.submitted[0]).toContain('se detuvo')
+})
+
+test('si Gemini termina con error, el trabajo falla', async ($, on) => {
+  const stream = JSON.stringify({ event: 'result', result: { status: 'ERROR', error: 'cuota agotada', response: '' } }) + '\n'
+  const s = await setup($, on, { stream })
+  const id = idOf((await $.tool.call({ tool: TOOL, task: 'Lee' })).result)
+  s.release(); await settle()
+  expect(String((await $.tool.call({ tool: TOOL, action: 'result', id })).result)).toContain('cuota agotada')
+  expect(s.submitted[0]).toContain('falló')
+})
+
+test('avisa si un agente cambia archivos fuera de su copia', async ($, on) => {
+  let main = 0
+  const s = await setup($, on, { git: (a) => {
+    const inMain = a[3] === 'status' && !(a as any).worktree
+    return { exitCode: 0, stdout: inMain && ++main > 3 ? ' M real.ts\0' : '', stderr: '' }
+  } })
+  const id = idOf((await $.tool.call({ tool: TOOL, task: 'Edita', write: true, role: 'gemini-frontend' })).result)
+  await settle(); s.release(); await settle()
+  expect(String((await $.tool.call({ tool: TOOL, action: 'result', id })).result)).toContain('fuera de su copia aislada')
 })

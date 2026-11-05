@@ -28,7 +28,10 @@ if errorlevel 1 goto :fallo
 call claude plugin update cuadrilla@cuadrilla
 
 echo.
-echo [2/4] Agregando plugins oficiales de Claude...
+echo [2/4] Plugins oficiales de Claude
+echo Se agregaran 15 plugins de Anthropic. Consumen algo de contexto y algunos usan hooks.
+choice /C SN /M "Instalarlos"
+if errorlevel 2 goto :gemini
 call claude plugin marketplace add anthropics/claude-plugins-official
 call claude plugin marketplace add anthropics/knowledge-work-plugins
 for %%P in (frontend-design security-guidance code-review pr-review-toolkit feature-dev code-simplifier claude-md-management claude-code-setup skill-creator) do (
@@ -40,6 +43,7 @@ for %%P in (design marketing engineering product-management data productivity) d
   if errorlevel 1 echo [AVISO] No se pudo instalar %%P.
 )
 
+:gemini
 echo.
 echo [3/4] Instalando el equipo de Gemini...
 where agy >nul 2>nul
@@ -49,6 +53,7 @@ if errorlevel 1 (
 )
 if exist "%~dp0gemini\skills" rmdir /s /q "%~dp0gemini\skills"
 xcopy "%~dp0skills" "%~dp0gemini\skills\" /E /I /Q /Y >nul
+xcopy "%~dp0references" "%~dp0gemini\references\" /E /I /Q /Y >nul
 call agy plugin uninstall cuadrilla >nul 2>nul
 call agy plugin install "%~dp0gemini"
 if errorlevel 1 echo [AVISO] No se pudo instalar Cuadrilla en Antigravity.

@@ -1,5 +1,12 @@
 # Cambios
 
+## 0.4.1
+
+- La escritura exige un rol autorizado.
+- Filtro de secretos ampliado y más pruebas.
+- Plugins oficiales opcionales durante la instalación.
+- Agentes de Gemini con skills recomendadas.
+
 ## 0.4.0
 
 - Equipo Gemini con 8 agentes propios y agentes por rol.
