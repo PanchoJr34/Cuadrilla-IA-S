@@ -8,7 +8,7 @@ description: Organiza proyectos de desarrollo web, diseño o marketing con la cu
 1. Define el objetivo y cómo se comprobará que quedó bien.
 2. Divide solo lo que sea realmente independiente: si un paso no usa la salida de otro, pueden ir en paralelo. Si es pequeño, hazlo directamente.
 3. Elige por parte:
-   - Gemini con `mcp__cuadrilla__delegate`: es parte del equipo, no un respaldo. Dale al menos una parte: lectura pesada, auditorías, borradores, variantes y segundas opiniones. También puede editar en copia aislada con `write: true`. Pásale las skills que aplican en `skills`.
+   - Equipo Gemini con `mcp__cuadrilla__delegate` y `role`: `gemini-investigador`, `gemini-auditor-web`, `gemini-seo-marketing`, `gemini-copywriter`, `gemini-frontend`, `gemini-disenador-ui`, `gemini-revisor` y `gemini-documentador`. Reparte trabajo real entre ambos equipos. Para crear o editar, usa `write: true`.
    - `arquitecto-web`: decisiones de estructura.
    - `frontend`: implementación.
    - `disenador-ui`: dirección y calidad visual.

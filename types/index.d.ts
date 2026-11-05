@@ -3,6 +3,7 @@ export type AgentState = 'running' | 'done' | 'failed' | 'stopped'
 export type CuadrillaAgent = {
   id: string
   label: string
+  role?: string
   model: string
   write: boolean
   state: AgentState

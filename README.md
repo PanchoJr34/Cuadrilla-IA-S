@@ -1,184 +1,207 @@
+<div align="center">
+
 # Cuadrilla IA
 
-**Plugin de Claude Code para Windows que pone a trabajar juntos a Claude y Gemini en desarrollo web, diseño y marketing.**
+**Tu equipo de agentes de Claude y Gemini para crear, mejorar y lanzar productos web.**
 
-Claude dirige, decide e integra. Gemini trabaja en segundo plano con tu plan de Google: lee proyectos, audita, redacta y edita en copias aisladas. Así avanzas más rápido, gastas menos de tus límites de Claude y una IA revisa a la otra.
+Plugin para Claude Code en Windows · 16 agentes · 47 skills · Sin WSL
 
-```text
-Tú ─▶ Claude Code (dirige, ejecuta e integra)
-        ├─▶ 7 agentes especializados de Claude
-        └─▶ Gemini en segundo plano ─▶ informe y cambios aislados
-                                          │
-                 Claude verifica y tú apruebas qué se integra
+[Empezar](#empezar-en-10-minutos) · [Cómo funciona](#cómo-funciona) · [Prompts](docs/prompts.md) · [Privacidad](PRIVACIDAD.md)
+
+</div>
+
+---
+
+## Qué es
+
+Cuadrilla convierte a Claude Code en un equipo de trabajo. Le pides un resultado, y Claude organiza quién hace cada parte: unas tareas las resuelven agentes de Claude y otras los agentes de Gemini, con tu plan de Google.
+
+Sirve para cuando el trabajo ya no cabe en una sola conversación: auditar un sitio, crear una landing, preparar un lanzamiento o entender un proyecto ajeno. Tú sigues decidiendo. Lo que Gemini cambia queda en una copia aparte hasta que lo revises y lo apruebes.
+
+## Cómo funciona
+
+```mermaid
+flowchart TD
+    A[Tú pides un resultado] --> B[Claude organiza el trabajo]
+    B --> C[Equipo Claude<br/>decide, ejecuta y prueba]
+    B --> D[Equipo Gemini<br/>investiga, audita y crea]
+    D --> E[Copia aislada e informe]
+    C --> F[Revisión cruzada]
+    E --> F
+    F --> G{¿Tú apruebas?}
+    G -- Sí --> H[Se integra al proyecto]
+    G -- No --> I[Se corrige o se descarta]
 ```
 
-## Inicio rápido
+Un ejemplo real:
 
-Necesitas Claude Code, Git y Antigravity CLI con sesión iniciada. Pega esto en PowerShell:
+1. Pides: "Audita esta web y dime qué arreglar primero".
+2. `gemini-auditor-web` revisa el proyecto y `gemini-seo-marketing` revisa SEO y mensaje.
+3. `revisor-seguridad` de Claude revisa los puntos delicados.
+4. Claude cruza los informes, comprueba lo importante y te entrega un plan con prioridades.
 
-```powershell
-git clone https://github.com/PanchoJr34/Cuadrilla-IA-S.git "$HOME\Cuadrilla-IA-S"; cmd /c "$HOME\Cuadrilla-IA-S\instalar.cmd"
-```
+## Empezar en 10 minutos
 
-Reinicia Claude Code y pide:
+### 1. Revisa lo que necesitas
 
-```text
-Usa la cuadrilla para auditar este proyecto en solo lectura y dame un plan priorizado.
-```
-
-## Qué tiene
-
-- **Equipo mixto:** Gemini y 7 agentes de Claude.
-- **47 skills:** desarrollo web, diseño, marketing y calidad.
-- **Panel en Claude Code:** límites, equipo activo, trabajos y acciones rápidas.
-- **Copias aisladas:** cada Gemini que edita usa su propia rama y carpeta.
-- **Control humano:** nada se integra hasta que tú lo apruebas.
-- **Hecho para Windows:** sin zsh ni WSL.
-
-## Estado
-
-| Función | Estado |
+| Necesitas | Para qué |
 | --- | --- |
-| Instalación, lectura y escritura aislada con Gemini | Probado en Windows |
-| Equipo con Gemini y agentes de Claude | Probado en Windows con la versión 0.2.0 |
-| Panel nuevo y reparto de la versión 0.3.0 | Pruebas simuladas; falta Windows real |
-| Skills dentro de Antigravity | Falta confirmar en Windows |
-| VS Code y app de escritorio | Falta confirmar en Windows |
+| Windows 10 u 11 | Sistema compatible |
+| Cuenta de Claude con Claude Code (Pro, Max, Team o Enterprise) | Claude y sus agentes |
+| Cuenta de Google | Gemini; el uso depende de tu plan |
+| Cuenta de GitHub con acceso al repo | Descargar Cuadrilla mientras sea privado |
 
-## Requisitos
+### 2. Instala las herramientas
 
-- Windows 10 u 11.
-- [Claude Code](https://code.claude.com/docs/en/setup) con un plan que lo incluya.
-- [Git](https://git-scm.com/downloads/win).
-- Antigravity CLI (`agy`), solo si quieres delegar a Gemini.
-
-Para instalar Antigravity CLI:
+Abre **PowerShell** y corre estos comandos, uno por uno:
 
 ```powershell
+winget install --id Git.Git -e
+irm https://claude.ai/install.ps1 | iex
 irm https://antigravity.google/cli/install.ps1 | iex
 ```
 
-Abre una terminal nueva, corre `agy` una vez para iniciar sesión y comprueba:
+Cierra PowerShell y abre una ventana nueva. Si `claude` o `agy` no se reconocen, cierra sesión en Windows y vuelve a entrar.
+
+### 3. Inicia sesión con tus cuentas
+
+Cada persona usa sus propias cuentas. Cuadrilla nunca te pide contraseñas.
+
+**Claude**
+
+```powershell
+claude
+```
+
+Sigue el navegador, entra con tu cuenta de Claude y autoriza. Cuando vuelvas a la terminal, escribe `/exit`.
+
+**Gemini**
+
+```powershell
+agy
+```
+
+Elige colores con Enter y entra con tu cuenta de Google. En la pantalla de datos puedes desmarcar **"Yes, I agree to help improve Antigravity CLI"**: presiona Enter sobre la opción, baja a `[Done]` y confirma. Luego sal con `/exit`.
+
+Comprueba Gemini:
 
 ```powershell
 agy -p "Responde solo: OK" --output-format json
 ```
 
-Debe responder `"status":"SUCCESS"`.
+Debe decir `"status":"SUCCESS"`.
 
-## Instalar
-
-1. Si el repositorio es privado, primero necesitas acceso y haber iniciado sesión con Git:
-
-   ```powershell
-   git ls-remote https://github.com/PanchoJr34/Cuadrilla-IA-S.git
-   ```
-
-2. Instala:
-
-   ```powershell
-   git clone https://github.com/PanchoJr34/Cuadrilla-IA-S.git "$HOME\Cuadrilla-IA-S"; cmd /c "$HOME\Cuadrilla-IA-S\instalar.cmd"
-   ```
-
-3. Reinicia Claude Code.
-
-El instalador agrega Cuadrilla a tu usuario de Claude Code, instala `security-guidance` y, si tienes `agy`, agrega las skills a Antigravity. No borres la carpeta `Cuadrilla-IA-S`.
-
-Funciona en sesiones locales de terminal, extensión de VS Code y app de escritorio. No funciona en sesiones en la nube. En el chat normal de Claude no corren plugins de este tipo.
-
-## Actualizar
-
-Cierra Claude Code, revisa qué cambió en el repositorio y corre:
+**GitHub**
 
 ```powershell
-git -C "$HOME\Cuadrilla-IA-S" pull; cmd /c "$HOME\Cuadrilla-IA-S\instalar.cmd"
+git ls-remote https://github.com/PanchoJr34/Cuadrilla-IA-S.git
 ```
 
-Reinicia Claude Code.
+Si abre una ventana, elige **Sign in with your browser** y autoriza. Debe mostrar una línea con `HEAD`.
 
-## Desinstalar
-
-Cierra Claude Code y corre:
+### 4. Instala Cuadrilla
 
 ```powershell
-claude plugin uninstall cuadrilla@cuadrilla
-claude plugin marketplace remove cuadrilla
-agy plugin uninstall cuadrilla
-Remove-Item "$HOME\Cuadrilla-IA-S" -Recurse -Force
+git clone https://github.com/PanchoJr34/Cuadrilla-IA-S.git "$HOME\Cuadrilla-IA-S"; cmd /c "$HOME\Cuadrilla-IA-S\instalar.cmd"
 ```
 
-Si no usas `security-guidance` por otra razón:
+El instalador agrega Cuadrilla, los plugins oficiales y el equipo Gemini. No borres esa carpeta.
+
+### 5. Pruébala
+
+Abre un proyecto:
 
 ```powershell
-claude plugin uninstall security-guidance@claude-plugins-official
+cd "C:\ruta\de\tu\proyecto"
+claude
 ```
 
-Cada proyecto puede conservar una carpeta `.cuadrilla` con informes y copias aisladas. Revisa que no tengas cambios pendientes ahí y bórrala si ya no la necesitas. Claude puede ayudarte a retirar copias con `git worktree remove`.
-
-## Uso
-
-Escribe `/cuadrilla` para abrir el panel. Luego pide lo que necesitas con tus palabras, o usa sus acciones rápidas.
-
-### Prompts maestros
-
-**Proyecto completo**
+Escribe `/cuadrilla` y pega:
 
 ```text
-Usa la cuadrilla para este objetivo: [objetivo]. Dime quién hará cada parte, dale a Gemini lo que pueda hacer, verifica sus resultados y no integres nada sin mi aprobación.
+Audita este proyecto en solo lectura. gemini-auditor-web revisa la estructura, gemini-seo-marketing revisa el mensaje y revisor-seguridad revisa los riesgos. Cruza los informes y dame un plan priorizado.
 ```
 
-**Sitio o landing**
+Si algo falla, corre `cmd /c "$HOME\Cuadrilla-IA-S\verificar.cmd"`.
 
-```text
-Usa la skill landing-completa para crear una página de [negocio] para [audiencia]. La acción principal es [acción]. Pregúntame solo lo imprescindible y no inventes datos.
-```
+## Dónde funciona
 
-**Auditoría web**
+| Lugar | Cuadrilla |
+| --- | --- |
+| Claude Code en terminal | Sí |
+| Extensión de VS Code | Sí, en sesiones locales |
+| App de escritorio | Sí, en sesiones locales de Claude Code |
+| Sesiones en la nube | No |
+| Chat normal de Claude | No corre el plugin; usa una skill como guía |
 
-```text
-Usa la skill auditoria-sitio en [URL o proyecto]. Gemini revisa estructura y contenido; revisor-seguridad revisa riesgos. Dame hallazgos con evidencia y prioridad.
-```
+## El equipo
 
-**Marketing**
+### Equipo Gemini
 
-```text
-Crea un plan de marketing para [producto]. Usa las skills marketing-plan, content-strategy y copywriting. Separa datos de suposiciones y dame acciones para 30 días.
-```
+Trabaja en segundo plano, sin terminal. No ve tu chat, así que Claude le da una tarea completa.
 
-**Diseño**
+| Agente | Se encarga de | Modo habitual |
+| --- | --- | --- |
+| `gemini-investigador` | Investigación y documentación | Lectura |
+| `gemini-auditor-web` | Auditorías de proyecto | Lectura |
+| `gemini-seo-marketing` | SEO, mensaje y conversión | Lectura |
+| `gemini-revisor` | Revisar cambios | Lectura |
+| `gemini-frontend` | Páginas y componentes | Copia aislada |
+| `gemini-disenador-ui` | Dirección y pulido visual | Copia aislada |
+| `gemini-copywriter` | Textos | Copia aislada |
+| `gemini-documentador` | Documentación | Copia aislada |
 
-```text
-Mejora esta interfaz sin romper la marca. Usa frontend-design y make-interfaces-feel-better. Primero dime la dirección visual y luego los cambios.
-```
+### Equipo Claude
 
-**Gemini con escritura aislada**
-
-```text
-Delega a Gemini, con escritura aislada, [cambio]. Después muéstrame el diff y verifica el resultado. No integres nada todavía.
-```
-
-**Proyecto ajeno**
-
-```text
-Usa la skill entender-codigo. Explícame este proyecto antes de cambiar nada y dime qué zonas son frágiles.
-```
-
-## Agentes
+Decide, usa herramientas, ejecuta y prueba.
 
 | Agente | Se encarga de | Permisos |
 | --- | --- | --- |
-| Gemini | Lectura pesada, auditorías, borradores, variantes y segundas opiniones | Solo lectura, o copia aislada |
-| `arquitecto-web` | Arquitectura y plan técnico | Solo lectura |
-| `frontend` | Interfaces y componentes | Edita y ejecuta comandos |
-| `disenador-ui` | Dirección y calidad visual | Edita |
-| `seo-marketing` | SEO, conversión y estrategia | Solo lectura |
-| `copywriter` | Textos y edición | Edita |
-| `qa-web` | Pruebas y validación | Ejecuta, no edita |
-| `revisor-seguridad` | Revisión de seguridad y calidad | Solo lectura |
+| `arquitecto-web` | Arquitectura y plan técnico | Lectura |
+| `frontend` | Implementación | Edita y ejecuta |
+| `disenador-ui` | Dirección visual | Edita |
+| `seo-marketing` | Estrategia y SEO | Lectura |
+| `copywriter` | Textos | Edita |
+| `qa-web` | Pruebas | Ejecuta, no edita |
+| `revisor-seguridad` | Seguridad y calidad | Lectura |
 
-## Skills
+## Prompts recomendados
 
-### Flujos de Cuadrilla
+Usa esta estructura para que el equipo entienda mejor:
+
+```text
+OBJETIVO: Qué quieres lograr.
+CONTEXTO: Negocio, audiencia y situación actual.
+ALCANCE: Qué se puede tocar y qué no.
+EQUIPO: Quién debe hacer cada parte.
+ENTREGA: Formato del resultado.
+LÍMITES: Datos que no se deben inventar y aprobaciones necesarias.
+```
+
+Encuentra prompts completos para auditorías, landings, SEO, marketing, rediseños y documentación en [`docs/prompts.md`](docs/prompts.md).
+
+## Qué incluye
+
+### Plugins oficiales
+
+El instalador agrega plugins públicos de Anthropic:
+
+| Área | Plugins |
+| --- | --- |
+| Código | `code-review`, `pr-review-toolkit`, `feature-dev`, `code-simplifier`, `engineering` |
+| Diseño | `frontend-design`, `design` |
+| Seguridad | `security-guidance` |
+| Negocio | `marketing`, `product-management`, `data`, `productivity` |
+| Claude Code | `claude-code-setup`, `claude-md-management`, `skill-creator` |
+
+Pueden sumar gasto de contexto y algunos usan hooks o conectores. Desactiva los que no necesites con `/plugin`. Los conectores externos requieren tu autorización.
+
+### Skills
+
+Disponibles para Claude y Gemini. Las de terceros son copias fijas en Markdown, sin scripts.
+
+<details>
+<summary><strong>Flujos de Cuadrilla</strong></summary>
 
 | Skill | Para qué sirve |
 | --- | --- |
@@ -190,7 +213,10 @@ Usa la skill entender-codigo. Explícame este proyecto antes de cambiar nada y d
 | `auditoria-base-datos` | Busca causas comunes de lentitud |
 | `contexto-proyecto` | Documenta el contexto para futuros agentes |
 
-### Desarrollo web
+</details>
+
+<details>
+<summary><strong>Desarrollo web</strong></summary>
 
 | Skill | Para qué sirve |
 | --- | --- |
@@ -204,7 +230,10 @@ Usa la skill entender-codigo. Explícame este proyecto antes de cambiar nada y d
 | `planning-and-task-breakdown` | Dividir el trabajo en tareas |
 | `debugging-and-error-recovery` | Encontrar la causa de un error |
 
-### Diseño y animación
+</details>
+
+<details>
+<summary><strong>Diseño y animación</strong></summary>
 
 | Skill | Para qué sirve |
 | --- | --- |
@@ -221,7 +250,10 @@ Usa la skill entender-codigo. Explícame este proyecto antes de cambiar nada y d
 | `improve-animations` | Auditar y planear mejoras |
 | `find-animation-opportunities` | Encontrar dónde sí conviene animar |
 
-### Marketing
+</details>
+
+<details>
+<summary><strong>Marketing</strong></summary>
 
 | Skill | Para qué sirve |
 | --- | --- |
@@ -238,7 +270,10 @@ Usa la skill entender-codigo. Explícame este proyecto antes de cambiar nada y d
 | `launch` | Planear un lanzamiento |
 | `pricing` | Definir precios y paquetes |
 
-### SEO, conversión y analítica
+</details>
+
+<details>
+<summary><strong>SEO, conversión y analítica</strong></summary>
 
 | Skill | Para qué sirve |
 | --- | --- |
@@ -250,34 +285,77 @@ Usa la skill entender-codigo. Explícame este proyecto antes de cambiar nada y d
 | `signup` | Mejorar registro y activación |
 | `analytics` | Definir y revisar medición |
 
-Las skills de terceros son copias fijas en Markdown, sin scripts. Consulta autores y licencias en [`third_party/SOURCES.md`](third_party/SOURCES.md). Algunas pueden mencionar skills o herramientas que no se incluyen; en ese caso, el agente debe usar lo disponible.
+</details>
+
+## Mapa del proyecto
+
+```text
+Cuadrilla-IA-S/
+├── agents/            Agentes de Claude
+├── gemini/
+│   ├── agents/        Agentes de Gemini
+│   └── plugin.json    Manifiesto para Antigravity
+├── skills/            Skills compartidas
+├── hooks/             Delegación, panel y pruebas
+├── docs/
+│   ├── prompts.md     Prompts listos para usar
+│   └── recursos.md    Catálogo de recursos
+├── third_party/       Licencias y origen de terceros
+├── instalar.cmd       Instalación y actualización
+├── verificar.cmd      Diagnóstico
+└── PRIVACIDAD.md      Privacidad y condiciones de uso
+```
+
+## Mantenimiento
+
+### Actualizar
+
+Cierra Claude Code, revisa qué cambió y corre:
+
+```powershell
+git -C "$HOME\Cuadrilla-IA-S" pull; cmd /c "$HOME\Cuadrilla-IA-S\instalar.cmd"
+```
+
+### Desinstalar
+
+Cierra Claude Code y corre:
+
+```powershell
+claude plugin uninstall cuadrilla@cuadrilla
+claude plugin marketplace remove cuadrilla
+agy plugin uninstall cuadrilla
+Remove-Item "$HOME\Cuadrilla-IA-S" -Recurse -Force
+```
+
+Los plugins oficiales se quitan aparte con `claude plugin uninstall <plugin>@<marketplace>`. Cada proyecto puede conservar `.cuadrilla` con informes y copias: revisa que no haya nada pendiente antes de borrarla.
 
 ## Límites
 
-- Gemini no tiene terminal en Cuadrilla: no corre pruebas, no compila y no instala nada.
-- Recibe hasta 300 nombres de archivo y las tareas tienen límite de 20,000 caracteres.
+- Gemini no ejecuta comandos, pruebas ni compilaciones.
 - Corren hasta 3 trabajos de Gemini a la vez.
+- Recibe hasta 300 nombres de archivo y cada tarea admite hasta 20,000 caracteres.
 - Un trabajo se detiene tras 10 minutos sin actividad o 45 minutos en total.
-- En modo solo lectura, Cuadrilla detecta cambios en un repositorio Git, pero no garantiza impedirlos.
+- La solo lectura se comprueba en repositorios Git: detecta cambios, pero no garantiza impedirlos.
 
-## Seguridad y privacidad
+## Estado
 
-- Gemini corre sin `--dangerously-skip-permissions` y no recibe acceso a terminal.
-- Cada agente de Claude tiene una lista de herramientas.
-- Se valida lo que llega a `agy`.
-- Los informes se tratan como datos, no como instrucciones.
-- Las skills de terceros no se actualizan solas.
-
-Lee el [aviso de privacidad y condiciones de uso](PRIVACIDAD.md) antes de usarlo con información de terceros o de una empresa.
+| Función | Estado |
+| --- | --- |
+| Delegación, solo lectura y copia aislada | Probado en Windows |
+| Equipo mixto con Gemini y Claude | Probado en Windows |
+| Plugins oficiales | Instalación probada en Linux |
+| Agentes de Gemini `gemini-*` y panel nuevo | Falta probar en Windows |
+| VS Code y app de escritorio | Falta probar en Windows |
 
 ## Problemas comunes
 
 | Mensaje | Solución |
 | --- | --- |
-| No se reconoce `claude` o `agy` | Abre una terminal nueva y revisa el PATH |
-| El clon falla en un repo privado | Corre `git ls-remote` y autoriza GitHub |
+| No se reconoce `claude` o `agy` | Abre una terminal nueva o reinicia sesión en Windows |
+| Falla el clon del repo | Corre `git ls-remote` y autoriza GitHub |
 | `write: true` necesita Git | Trabaja en un repositorio con al menos un commit |
-| Gemini termina sin informe | Pudo pedir un comando; abre el informe y vuelve a lanzar la tarea sin ese paso |
+| No aparecen los agentes de Gemini | Corre `verificar.cmd` y luego `agy agents` |
+| Gemini termina sin informe | Quita pasos que requieran comandos y lánzalo otra vez |
 | El panel no aparece | Escribe `/cuadrilla` |
 
 ## Desarrollo
@@ -286,8 +364,9 @@ Lee el [aviso de privacidad y condiciones de uso](PRIVACIDAD.md) antes de usarlo
 claude plugin validate .
 claude plugin test .
 claude --plugin-dir .
+agy plugin validate --strict .\gemini
 ```
 
 ## Créditos y licencia
 
-El código propio se publica bajo licencia [MIT](LICENSE). Las skills de terceros conservan su autoría y licencia. Parte del formato de salida de `agy` y el panel de uso se basan en [orchestra](https://github.com/TheAlejo160/orchestra) (MIT). El catálogo de recursos está en [`docs/recursos.md`](docs/recursos.md).
+Código propio bajo licencia [MIT](LICENSE). Las skills de terceros conservan su autoría y licencia en [`third_party/`](third_party/SOURCES.md). Parte del formato de salida de `agy` y el panel se basan en [orchestra](https://github.com/TheAlejo160/orchestra), también MIT.

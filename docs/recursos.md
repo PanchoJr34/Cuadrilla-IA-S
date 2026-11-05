@@ -1,11 +1,11 @@
-# Catálogo de recursos
+# Recursos para Claude
 
-Selección basada en [Pablo in Public](https://pabloinpublic.com/recursos). Son enlaces y notas propias: el contenido sigue siendo de sus autores. Se leyeron 33 páginas; las de noticias, otros modelos y otros sistemas de agentes se clasificaron por su resumen.
+Recursos de [Pablo in Public](https://pabloinpublic.com/recursos) que se pueden usar con Claude. Son enlaces y notas propias; el contenido sigue siendo de sus autores.
 
 - **Incluido:** está en Cuadrilla con copia fija o como función propia.
 - **Referencia:** vale la pena consultarlo, pero no se instala.
 - **Inspiración:** la idea influyó en algo propio, sin copiar su texto.
-- **Excluido:** no entra por riesgo, costo o porque no aporta a web, diseño y marketing.
+- **Excluido:** se puede usar con Claude, pero no entra en Cuadrilla por riesgo o porque no aporta al enfoque.
 
 | Recurso | Estado | Nota |
 | --- | --- | --- |
@@ -40,18 +40,8 @@ Selección basada en [Pablo in Public](https://pabloinpublic.com/recursos). Son 
 | [NotebookLM a skill](https://pabloinpublic.com/recursos/notebooklm-skill) | Referencia | Para crear skills propias. |
 | [last30days](https://pabloinpublic.com/recursos/last30days-skill) | Por revisar | Investigación reciente. |
 | [caveman](https://pabloinpublic.com/recursos/caveman) | Excluido | Cuadrilla ya aplica reglas de eficiencia. |
-| [Scrapling Stealth](https://pabloinpublic.com/recursos/scrapling-stealth) | Excluido | Busca evadir protecciones de sitios. |
 | [GitReverse](https://pabloinpublic.com/recursos/gitreverse-roba-el-prompt) | Excluido | No aporta al flujo y su enfoque puede ser riesgoso para repos ajenos. |
 | [Kapso WhatsApp MCP](https://pabloinpublic.com/recursos/kapso-whatsapp-mcp) | Excluido | Conecta mensajería real; requiere decisión aparte. |
-| [Comparativa Claude Code y Codex](https://pabloinpublic.com/recursos/astra-vs-claude-code) | Excluido | No aplica a Claude y Gemini. |
-| [Guía de GPT-6 Astra](https://pabloinpublic.com/recursos/promptear-astra) | Excluido | No aplica a Claude y Gemini. |
-| [Kimi K3](https://pabloinpublic.com/recursos/probar-kimi-k3) | Excluido | Requiere otro plan de pago. |
-| [Grok Bot](https://pabloinpublic.com/recursos/grok-bot) | Excluido | Requiere otro servicio de pago. |
-| [Hermes Agent en VPS](https://pabloinpublic.com/recursos/monta-tu-hermes-agent) | Excluido | Otro sistema de agentes. |
-| [OpenClaw y Hermes](https://pabloinpublic.com/recursos/guia-openclaw-2) | Excluido | Otros sistemas de agentes. |
-| [OpenBot](https://pabloinpublic.com/recursos/openbot) | Excluido | Otro sistema, en alpha. |
-| [TradingAgents](https://pabloinpublic.com/recursos/tradingagents-roles) | Excluido | No aplica al enfoque. |
-| [Navier-Stokes](https://pabloinpublic.com/recursos/navier-stokes) | Excluido | No aplica al enfoque. |
 | [Memoria de Claude](https://pabloinpublic.com/recursos/memoria-claude) | Excluido | Función personal, no del plugin. |
 | [Claude Opus 5](https://pabloinpublic.com/recursos/claude-opus-5) | Excluido | Noticia de producto. |
 | [Créditos de Anthropic](https://pabloinpublic.com/recursos/creditos-anthropic) | Excluido | Noticia de facturación. |

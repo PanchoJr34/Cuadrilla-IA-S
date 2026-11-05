@@ -11,6 +11,7 @@ Cuadrilla no tiene servidor propio, no pide contraseñas y no envía telemetría
 | Tu equipo | Informes en `.cuadrilla/reports/`, copias aisladas en `.cuadrilla/worktrees/` y estado del panel |
 | Anthropic | Lo que usas en Claude Code, con tu cuenta y según sus condiciones |
 | Google | La tarea delegada, hasta 300 nombres de archivo y el contenido que Gemini lea, con tu cuenta y según sus condiciones |
+| Conectores | Solo lo que autorices en cada servicio externo |
 
 Cuadrilla omite de la lista archivos con nombres típicos de secretos, como `.env` y `.pem`, y le pide a Gemini no leerlos. Esa protección es parcial: no sustituye revisar qué contiene tu proyecto.
 

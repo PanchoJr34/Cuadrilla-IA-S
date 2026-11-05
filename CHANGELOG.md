@@ -1,5 +1,12 @@
 # Cambios
 
+## 0.4.0
+
+- Equipo Gemini con 8 agentes propios y agentes por rol.
+- Plugin separado para Antigravity y comando `verificar.cmd`.
+- Instalación de plugins oficiales de Anthropic.
+- README, prompts y recursos reorganizados.
+
 ## 0.3.0
 
 - Gemini participa por defecto en trabajos con varias partes y recibe skills.
