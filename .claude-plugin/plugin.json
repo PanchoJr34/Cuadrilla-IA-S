@@ -1,7 +1,7 @@
 {
   "name": "cuadrilla",
-  "version": "0.7.0",
-  "description": "Agentes y skills de desarrollo web, diseño y marketing para Claude Code en Windows, con delegación a Gemini en segundo plano",
+  "version": "1.0.0",
+  "description": "Multi-agent Claude Code plugin for Windows: Claude and Gemini teams, 101 skills, model routing and isolated worktrees for web, design and marketing.",
   "author": {
     "name": "PanchoJr34",
     "url": "https://github.com/PanchoJr34"

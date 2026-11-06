@@ -1,5 +1,10 @@
 # Cambios
 
+## 1.0.0
+
+- Primera versión pública, con documentación en español e inglés.
+- 24 prompts maestros, política de seguridad y guía de contribución.
+
 ## 0.7.0
 
 - Selector de áreas con 34 acciones.

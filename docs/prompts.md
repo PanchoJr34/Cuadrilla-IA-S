@@ -1,113 +1,279 @@
-# Prompts de Cuadrilla
+# Prompts maestros
 
-Reemplaza lo que está entre corchetes. Mientras más claro el contexto, mejor el resultado.
+Reemplaza lo que está entre corchetes. [English](prompts.en.md)
 
-## Auditoría completa de sitio
+## Desarrollo
 
-```text
-OBJETIVO: Auditar [sitio o proyecto] y decidir qué arreglar primero.
-CONTEXTO: Es para [negocio], su audiencia es [audiencia] y su objetivo principal es [objetivo].
-ALCANCE: Solo lectura. No cambies archivos.
-EQUIPO:
-- gemini-auditor-web: estructura, calidad y accesibilidad.
-- gemini-seo-marketing: SEO, mensaje y conversión con las skills seo-audit y cro.
-- revisor-seguridad: autenticación, datos y secretos.
-- Claude: verifica hallazgos importantes y consolida.
-ENTREGA: Resumen de 5 líneas y tabla con hallazgo, evidencia, impacto, esfuerzo y prioridad. Termina con los 3 cambios a hacer primero.
-LÍMITES: No inventes métricas. Separa lo verificado de lo probable.
-```
-
-## Landing de alta conversión
+### Auditoría integral de proyecto
 
 ```text
-OBJETIVO: Crear una landing para [producto] que logre [acción principal].
-CONTEXTO: Audiencia: [audiencia]. Problema: [problema]. Oferta: [oferta]. Marca: [colores, tono o enlace].
-ALCANCE: Trabaja en [carpeta]. Stack: [stack].
-EQUIPO:
-- gemini-investigador: resume competidores y objeciones.
-- gemini-copywriter: propone mensaje y textos con la skill copywriting.
-- disenador-ui: define la dirección visual con frontend-design.
-- frontend: implementa la versión elegida.
-- qa-web: prueba móvil, escritorio y accesibilidad.
-ENTREGA: Primero mensaje y dirección visual para aprobar. Después página, comprobaciones y pendientes.
-LÍMITES: No inventes testimonios, clientes, cifras ni logos. No publiques nada.
+OBJETIVO: Auditar [proyecto] y decidir qué arreglar primero.
+CONTEXTO: Negocio, audiencia y situación actual: [contexto].
+ALCANCE: Puedes tocar [archivos o áreas]. No cambies [límites].
+EQUIPO: gemini-auditor-web: estructura y calidad. revisor-seguridad: riesgos. Claude: verifica y consolida.
+ENTREGA: Tabla con hallazgo, evidencia, impacto, esfuerzo y prioridad, más los 3 primeros cambios.
+LÍMITES: No inventes datos. Separa lo verificado de lo supuesto. No integres ni publiques sin mi aprobación.
 ```
 
-## Plan de SEO
+### Función nueva
 
 ```text
-OBJETIVO: Crear un plan de SEO de 90 días para [sitio].
-CONTEXTO: Vendemos [producto] en [mercado]. Los datos disponibles son [Search Console, Analytics o ninguno].
-ALCANCE: Solo análisis y propuestas.
-EQUIPO:
-- gemini-seo-marketing: auditoría y oportunidades con seo-audit, ai-seo y schema.
-- seo-marketing: prioriza por impacto y esfuerzo.
-ENTREGA: Diagnóstico, plan por mes, cambios técnicos, ideas de contenido y cómo medir.
-LÍMITES: Sin garantías de posiciones. Marca como hipótesis lo que no tenga datos.
+OBJETIVO: Implementar [función] con estas reglas: [reglas].
+CONTEXTO: Negocio, audiencia y situación actual: [contexto].
+ALCANCE: Puedes tocar [archivos o áreas]. No cambies [límites].
+EQUIPO: arquitecto-web: plan. gemini-frontend o frontend: implementación. qa-web: pruebas. gemini-revisor: revisión.
+ENTREGA: Plan para aprobar, diff, pruebas y riesgos.
+LÍMITES: No inventes datos. Separa lo verificado de lo supuesto. No integres ni publiques sin mi aprobación.
 ```
 
-## Plan de marketing
+### Depurar un error
 
 ```text
-OBJETIVO: Lograr [meta] en [tiempo].
-CONTEXTO: Producto: [producto]. Cliente ideal: [cliente]. Presupuesto: [monto]. Canales actuales: [canales].
-EQUIPO:
-- gemini-investigador: analiza mercado y competencia.
-- seo-marketing: define estrategia con marketing-plan y marketing-psychology.
-- copywriter: crea mensajes clave.
-ENTREGA: Estrategia, calendario de 30 días, mensajes por canal, métricas y riesgos.
-LÍMITES: No inventes datos de mercado. Cita fuentes o márcalo como supuesto.
+OBJETIVO: Encontrar la causa de [error] y corregirla.
+CONTEXTO: Negocio, audiencia y situación actual: [contexto].
+ALCANCE: Puedes tocar [archivos o áreas]. No cambies [límites].
+EQUIPO: Claude reproduce y corrige. gemini-investigador revisa archivos relacionados.
+ENTREGA: Causa raíz, corrección y comprobación.
+LÍMITES: No inventes datos. Separa lo verificado de lo supuesto. No integres ni publiques sin mi aprobación.
 ```
 
-## Rediseño de interfaz
+### Refactor seguro
 
 ```text
-OBJETIVO: Mejorar [pantalla] para que sea más clara y profesional.
-CONTEXTO: Marca: [marca]. Usuarios: [usuarios]. Lo que no funciona: [problema].
-ALCANCE: Cambia solo [archivos]. Conserva la lógica.
-EQUIPO:
-- gemini-disenador-ui: propone cambios en copia aislada con make-interfaces-feel-better.
-- disenador-ui: decide la dirección final.
-- qa-web: comprueba responsive y accesibilidad.
-ENTREGA: Antes y después, diff y lista de pruebas.
-LÍMITES: No integres nada sin mi aprobación.
+OBJETIVO: Simplificar [módulo] sin cambiar su comportamiento.
+CONTEXTO: Negocio, audiencia y situación actual: [contexto].
+ALCANCE: Puedes tocar [archivos o áreas]. No cambies [límites].
+EQUIPO: frontend: cambios pequeños. qa-web: pruebas. gemini-revisor: revisión.
+ENTREGA: Cambios por etapas y pruebas antes y después.
+LÍMITES: No inventes datos. Separa lo verificado de lo supuesto. No integres ni publiques sin mi aprobación.
 ```
 
-## Función nueva
+### Rendimiento
 
 ```text
-OBJETIVO: Implementar [función].
-CONTEXTO: Reglas de negocio: [reglas]. Archivos relacionados: [archivos].
-ALCANCE: Puedes editar [carpetas]. No cambies [restricciones].
-EQUIPO:
-- arquitecto-web: plan mínimo.
-- gemini-frontend o frontend: implementación.
-- qa-web: pruebas.
-- gemini-revisor y revisor-seguridad: revisión.
-ENTREGA: Plan para aprobar, cambios, comprobaciones y riesgos.
-LÍMITES: Sin dependencias nuevas sin avisar.
+OBJETIVO: Mejorar la velocidad de [página o app].
+CONTEXTO: Negocio, audiencia y situación actual: [contexto].
+ALCANCE: Puedes tocar [archivos o áreas]. No cambies [límites].
+EQUIPO: gemini-auditor-web: análisis. frontend: correcciones. qa-web: mediciones.
+ENTREGA: Mediciones, causas, cambios e impacto comprobado.
+LÍMITES: No inventes datos. Separa lo verificado de lo supuesto. No integres ni publiques sin mi aprobación.
 ```
 
-## Entender un proyecto ajeno
+### Entender un proyecto
 
 ```text
 OBJETIVO: Entender [proyecto] antes de cambiarlo.
-ALCANCE: Solo lectura.
-EQUIPO:
-- gemini-investigador: mapa del proyecto.
-- Claude: confirma las partes críticas con la skill entender-codigo.
-ENTREGA: Qué hace, cómo fluye, zonas seguras, zonas frágiles y por dónde empezar.
-LÍMITES: Cita archivos reales.
+CONTEXTO: Negocio, audiencia y situación actual: [contexto].
+ALCANCE: Puedes tocar [archivos o áreas]. No cambies [límites].
+EQUIPO: gemini-investigador: mapa. Claude: confirma lo crítico con entender-codigo.
+ENTREGA: Qué hace, flujo, zonas frágiles y por dónde empezar.
+LÍMITES: No inventes datos. Separa lo verificado de lo supuesto. No integres ni publiques sin mi aprobación.
 ```
 
-## Documentación
+## Diseño
+
+### Dirección visual
 
 ```text
-OBJETIVO: Documentar [proyecto] para [audiencia].
-ALCANCE: Crea o edita solo [carpeta de documentación] en copia aislada.
-EQUIPO:
-- gemini-documentador: redacta.
-- gemini-revisor: compara contra el código.
-ENTREGA: Diff de documentos y lista de lo no comprobado.
-LÍMITES: Documenta solo lo que exista.
+OBJETIVO: Definir el estilo de [producto].
+CONTEXTO: Negocio, audiencia y situación actual: [contexto].
+ALCANCE: Puedes tocar [archivos o áreas]. No cambies [límites].
+EQUIPO: gemini-disenador-ui: propuestas. disenador-ui: decisión final.
+ENTREGA: Tres direcciones, recomendación, tipografía, color y componentes.
+LÍMITES: No inventes datos. Separa lo verificado de lo supuesto. No integres ni publiques sin mi aprobación.
+```
+
+### Rediseño
+
+```text
+OBJETIVO: Mejorar [pantalla] sin cambiar su lógica.
+CONTEXTO: Negocio, audiencia y situación actual: [contexto].
+ALCANCE: Puedes tocar [archivos o áreas]. No cambies [límites].
+EQUIPO: gemini-disenador-ui en copia aislada. qa-web: responsive y accesibilidad.
+ENTREGA: Antes y después, diff y pruebas.
+LÍMITES: No inventes datos. Separa lo verificado de lo supuesto. No integres ni publiques sin mi aprobación.
+```
+
+### Accesibilidad
+
+```text
+OBJETIVO: Revisar la accesibilidad de [sitio].
+CONTEXTO: Negocio, audiencia y situación actual: [contexto].
+ALCANCE: Puedes tocar [archivos o áreas]. No cambies [límites].
+EQUIPO: gemini-auditor-web: revisión. qa-web: comprobación.
+ENTREGA: Hallazgos, impacto y corrección.
+LÍMITES: No inventes datos. Separa lo verificado de lo supuesto. No integres ni publiques sin mi aprobación.
+```
+
+### Animación
+
+```text
+OBJETIVO: Mejorar el movimiento de [interfaz].
+CONTEXTO: Negocio, audiencia y situación actual: [contexto].
+ALCANCE: Puedes tocar [archivos o áreas]. No cambies [límites].
+EQUIPO: disenador-ui con find-animation-opportunities y review-animations.
+ENTREGA: Dónde animar, dónde no y cómo implementarlo.
+LÍMITES: No inventes datos. Separa lo verificado de lo supuesto. No integres ni publiques sin mi aprobación.
+```
+
+## Marketing
+
+### Plan de 90 días
+
+```text
+OBJETIVO: Lograr [meta] en 90 días.
+CONTEXTO: Negocio, audiencia y situación actual: [contexto].
+ALCANCE: Puedes tocar [archivos o áreas]. No cambies [límites].
+EQUIPO: gemini-investigador: mercado. seo-marketing: estrategia. copywriter: mensajes.
+ENTREGA: Plan mensual, canales, métricas, presupuesto y riesgos.
+LÍMITES: No inventes datos. Separa lo verificado de lo supuesto. No integres ni publiques sin mi aprobación.
+```
+
+### Auditoría SEO
+
+```text
+OBJETIVO: Encontrar lo que frena el SEO de [sitio].
+CONTEXTO: Negocio, audiencia y situación actual: [contexto].
+ALCANCE: Puedes tocar [archivos o áreas]. No cambies [límites].
+EQUIPO: gemini-seo-marketing con seo-audit y schema. Claude: verifica.
+ENTREGA: Problemas técnicos, contenido, datos estructurados y prioridades.
+LÍMITES: No inventes datos. Separa lo verificado de lo supuesto. No integres ni publiques sin mi aprobación.
+```
+
+### Visibilidad en IA
+
+```text
+OBJETIVO: Mejorar cómo aparece [marca] en buscadores con IA.
+CONTEXTO: Negocio, audiencia y situación actual: [contexto].
+ALCANCE: Puedes tocar [archivos o áreas]. No cambies [límites].
+EQUIPO: gemini-seo-marketing con ai-seo.
+ENTREGA: Diagnóstico, contenidos y cambios técnicos.
+LÍMITES: No inventes datos. Separa lo verificado de lo supuesto. No integres ni publiques sin mi aprobación.
+```
+
+### Conversión
+
+```text
+OBJETIVO: Aumentar conversiones de [página].
+CONTEXTO: Negocio, audiencia y situación actual: [contexto].
+ALCANCE: Puedes tocar [archivos o áreas]. No cambies [límites].
+EQUIPO: gemini-seo-marketing con cro. disenador-ui: propuesta.
+ENTREGA: Hipótesis, cambios y prueba A/B sugerida.
+LÍMITES: No inventes datos. Separa lo verificado de lo supuesto. No integres ni publiques sin mi aprobación.
+```
+
+### Competencia
+
+```text
+OBJETIVO: Analizar a [competidores].
+CONTEXTO: Negocio, audiencia y situación actual: [contexto].
+ALCANCE: Puedes tocar [archivos o áreas]. No cambies [límites].
+EQUIPO: gemini-investigador con competitor-profiling.
+ENTREGA: Comparación, oportunidades, fuentes y supuestos.
+LÍMITES: No inventes datos. Separa lo verificado de lo supuesto. No integres ni publiques sin mi aprobación.
+```
+
+### Campaña
+
+```text
+OBJETIVO: Crear una campaña para [oferta].
+CONTEXTO: Negocio, audiencia y situación actual: [contexto].
+ALCANCE: Puedes tocar [archivos o áreas]. No cambies [límites].
+EQUIPO: seo-marketing: estrategia. gemini-copywriter: anuncios y correos.
+ENTREGA: Audiencias, mensajes, piezas y métricas.
+LÍMITES: No inventes datos. Separa lo verificado de lo supuesto. No integres ni publiques sin mi aprobación.
+```
+
+## Contenido
+
+### Landing
+
+```text
+OBJETIVO: Crear una landing para [oferta].
+CONTEXTO: Negocio, audiencia y situación actual: [contexto].
+ALCANCE: Puedes tocar [archivos o áreas]. No cambies [límites].
+EQUIPO: gemini-investigador: objeciones. gemini-copywriter: textos. disenador-ui y frontend: página. qa-web: pruebas.
+ENTREGA: Mensaje y diseño para aprobar; después, página y comprobaciones.
+LÍMITES: No inventes datos. Separa lo verificado de lo supuesto. No integres ni publiques sin mi aprobación.
+```
+
+### Blog
+
+```text
+OBJETIVO: Crear contenido sobre [tema] para [audiencia].
+CONTEXTO: Negocio, audiencia y situación actual: [contexto].
+ALCANCE: Puedes tocar [archivos o áreas]. No cambies [límites].
+EQUIPO: gemini-investigador: fuentes. gemini-copywriter: borrador. copywriter: edición.
+ENTREGA: Esquema, artículo, título, descripción y enlaces internos.
+LÍMITES: No inventes datos. Separa lo verificado de lo supuesto. No integres ni publiques sin mi aprobación.
+```
+
+### Calendario de redes
+
+```text
+OBJETIVO: Planear redes para [marca] durante [periodo].
+CONTEXTO: Negocio, audiencia y situación actual: [contexto].
+ALCANCE: Puedes tocar [archivos o áreas]. No cambies [límites].
+EQUIPO: gemini-copywriter con social.
+ENTREGA: Calendario, ideas, formatos y textos.
+LÍMITES: No inventes datos. Separa lo verificado de lo supuesto. No integres ni publiques sin mi aprobación.
+```
+
+## Negocio
+
+### Oferta y precios
+
+```text
+OBJETIVO: Mejorar la oferta y precio de [producto].
+CONTEXTO: Negocio, audiencia y situación actual: [contexto].
+ALCANCE: Puedes tocar [archivos o áreas]. No cambies [límites].
+EQUIPO: seo-marketing con offers y pricing.
+ENTREGA: Opciones, supuestos, riesgos y recomendación.
+LÍMITES: No inventes datos. Separa lo verificado de lo supuesto. No integres ni publiques sin mi aprobación.
+```
+
+### Lanzamiento
+
+```text
+OBJETIVO: Preparar el lanzamiento de [producto] para [fecha].
+CONTEXTO: Negocio, audiencia y situación actual: [contexto].
+ALCANCE: Puedes tocar [archivos o áreas]. No cambies [límites].
+EQUIPO: qa-web: producción. seo-marketing: plan. gemini-copywriter: anuncios.
+ENTREGA: Plan, responsables, riesgos y lista final.
+LÍMITES: No inventes datos. Separa lo verificado de lo supuesto. No integres ni publiques sin mi aprobación.
+```
+
+## Seguridad
+
+### Auditoría de seguridad
+
+```text
+OBJETIVO: Revisar la seguridad de [app].
+CONTEXTO: Negocio, audiencia y situación actual: [contexto].
+ALCANCE: Puedes tocar [archivos o áreas]. No cambies [límites].
+EQUIPO: revisor-seguridad y gemini-revisor en solo lectura.
+ENTREGA: Hallazgos con archivo, impacto, corrección y lo no comprobado.
+LÍMITES: No inventes datos. Separa lo verificado de lo supuesto. No integres ni publiques sin mi aprobación.
+```
+
+### Salida a producción
+
+```text
+OBJETIVO: Confirmar si [proyecto] está listo para publicarse.
+CONTEXTO: Negocio, audiencia y situación actual: [contexto].
+ALCANCE: Puedes tocar [archivos o áreas]. No cambies [límites].
+EQUIPO: qa-web, revisor-seguridad y gemini-auditor-web.
+ENTREGA: Bloqueos, pendientes, pruebas y decisión.
+LÍMITES: No inventes datos. Separa lo verificado de lo supuesto. No integres ni publiques sin mi aprobación.
+```
+
+### Auditoría de base de datos
+
+```text
+OBJETIVO: Encontrar lentitud en [base de datos o app].
+CONTEXTO: Negocio, audiencia y situación actual: [contexto].
+ALCANCE: Puedes tocar [archivos o áreas]. No cambies [límites].
+EQUIPO: Claude con auditoria-base-datos. gemini-auditor-web: revisión.
+ENTREGA: Hallazgos, impacto, corrección y medición.
+LÍMITES: No inventes datos. Separa lo verificado de lo supuesto. No integres ni publiques sin mi aprobación.
 ```

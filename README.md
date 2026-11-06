@@ -6,11 +6,17 @@
 
 Plugin para Claude Code en Windows · 15 agentes · 101 skills · Español e inglés · Sin WSL
 
+**Español** · [English](README.en.md)
+
 [Empezar](#empezar-en-10-minutos) · [Cómo funciona](#cómo-funciona) · [Prompts](docs/prompts.md) · [Privacidad](PRIVACIDAD.md)
 
 </div>
 
 ---
+
+## Descripción técnica
+
+Cuadrilla es un plugin de Claude Code para orquestación multiagente en Windows. Registra una herramienta MCP de delegación, un panel de estado y hooks de enrutamiento. Lanza agentes de Antigravity CLI sin shell, aísla la escritura con `git worktree`, selecciona modelos por turno y trata la salida de otros modelos como datos no confiables.
 
 ## Qué es
 
@@ -49,7 +55,6 @@ Un ejemplo real:
 | Windows 10 u 11 | Sistema compatible |
 | Cuenta de Claude con Claude Code (Pro, Max, Team o Enterprise) | Claude y sus agentes |
 | Cuenta de Google | Gemini; el uso depende de tu plan |
-| Cuenta de GitHub con acceso al repo | Descargar Cuadrilla mientras sea privado |
 
 ### 2. Instala las herramientas
 
@@ -90,14 +95,6 @@ agy -p "Responde solo: OK" --output-format json
 ```
 
 Debe decir `"status":"SUCCESS"`.
-
-**GitHub**
-
-```powershell
-git ls-remote https://github.com/PanchoJr34/Cuadrilla-IA-S.git
-```
-
-Si abre una ventana, elige **Sign in with your browser** y autoriza. Debe mostrar una línea con `HEAD`.
 
 ### 4. Instala Cuadrilla
 
@@ -211,7 +208,7 @@ ENTREGA: Formato del resultado.
 LÍMITES: Datos que no se deben inventar y aprobaciones necesarias.
 ```
 
-Encuentra prompts completos para auditorías, landings, SEO, marketing, rediseños y documentación en [`docs/prompts.md`](docs/prompts.md).
+Consulta los [24 prompts maestros](docs/prompts.md) para desarrollo, diseño, marketing, contenido, negocio y seguridad. También están [en inglés](docs/prompts.en.md).
 
 ## Qué incluye
 
@@ -332,11 +329,14 @@ Cuadrilla-IA-S/
 ├── references/        Listas de revisión de las skills
 ├── hooks/             Delegación, panel y pruebas
 ├── docs/
-│   ├── prompts.md     Prompts listos para usar
+│   ├── prompts.md     Prompts en español
+│   ├── prompts.en.md  Prompts en inglés
 │   └── recursos.md    Catálogo de recursos
 ├── third_party/       Licencias y origen de terceros
 ├── instalar.cmd       Instalación y actualización
 ├── verificar.cmd      Diagnóstico
+├── SECURITY.md        Reporte de vulnerabilidades
+├── CONTRIBUTING.md    Cómo contribuir
 └── PRIVACIDAD.md      Privacidad y condiciones de uso
 ```
 
@@ -371,28 +371,14 @@ Los plugins oficiales se quitan aparte con `claude plugin uninstall <plugin>@<ma
 - Un trabajo se detiene tras 10 minutos sin actividad o 45 minutos en total.
 - La solo lectura se comprueba en repositorios Git: detecta cambios, pero no garantiza impedirlos.
 
-## Estado
-
-| Función | Estado |
-| --- | --- |
-| Delegación, solo lectura y copia aislada | Probado en Windows |
-| Equipo mixto con Gemini y Claude | Probado en Windows |
-| Panel y agentes `gemini-*` en terminal | Probado en Windows |
-| Plugins oficiales | Instalación probada en Linux |
-| VS Code | Probado en Windows |
-| App de escritorio | Falta probar en Windows |
-| Agentes de Gemini dentro de `agy` | Probado en Windows |
-| Cuota de Gemini y elección de modelo | Falta probar en Windows |
-
 ## Problemas comunes
 
 | Mensaje | Solución |
 | --- | --- |
 | No se reconoce `claude` o `agy` | Abre una terminal nueva o reinicia sesión en Windows |
-| Falla el clon del repo | Corre `git ls-remote` y autoriza GitHub |
 | `write: true` necesita Git | Trabaja en un repositorio con al menos un commit |
 | No aparecen los agentes de Gemini | Corre `verificar.cmd` y luego `agy agents` |
-| Se abre una ventana de consola al lanzar Gemini | Se está investigando; no afecta el resultado |
+| Aparece un momento una ventana de consola | Es normal al lanzar procesos de Windows; se cierra sola |
 | Gemini termina sin informe | Quita pasos que requieran comandos y lánzalo otra vez |
 | El panel no aparece | Escribe `/cuadrilla` |
 
