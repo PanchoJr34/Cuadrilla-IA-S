@@ -1,5 +1,9 @@
 # Cambios
 
+## 0.6.0
+
+- Modelo automático por turno en Claude Code, con botón y `/cuadrilla-auto`.
+
 ## 0.5.3
 
 - Flash pasa a ser el modelo general de Gemini; Argon queda para lo difícil.

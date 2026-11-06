@@ -299,3 +299,21 @@ test('el trabajo general usa Flash y no Argon', async ($, on) => {
   await settle(); s.release(); await settle()
   expect(s.spawned[0].argv).toContain('--model=gemini-3-8-flash-high')
 })
+
+test('cada turno elige modelo en español e inglés', async ($, on) => {
+  const seen: string[] = []
+  on('turn.step', async function* (_: unknown, e: any) { seen.push(e.model); return {} as never })
+  on('turn.start', (_: unknown, e: any) => ({ turnId: e.turnId }) as never)
+  await setup($, on)
+  const turn = async (text: string) => {
+    await $.turn.start({ text, turnId: text } as never).catch(() => undefined)
+    try {
+      for await (const _ of $.turn.step({ turnId: text, index: 0, model: 'claude-opus-5-5', effort: 'medium' } as never)) void _
+    } catch {}
+  }
+  await turn('hola')
+  await turn('audit the authentication flow')
+  await turn('Agrega una sección de contacto con formulario a esta página, por favor, siguiendo el diseño actual')
+  await turn('hola, use sonnet')
+  expect(seen).toEqual(['haiku', 'opus', 'sonnet', 'sonnet'])
+})

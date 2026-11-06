@@ -40,6 +40,7 @@ const SKIP_DIRS = new Set(['.git', '.cuadrilla', '.orchestra', 'node_modules', '
 const agents = atom({ plugin: 'cuadrilla', key: 'agents' } as const, [], { shape: 'agents-1' })
 const limits = atom({ plugin: 'cuadrilla', key: 'limits' } as const, [], { shape: 'limits-1' })
 const team = atom({ plugin: 'cuadrilla', key: 'team' } as const, {}, { shape: 'team-1' })
+const mainPick = atom({ plugin: 'cuadrilla', key: 'mainPick' } as const, {}, { shape: 'main-1' })
 const gemini = atom({ plugin: 'cuadrilla', key: 'gemini' } as const, { quotas: [], sessionTokens: 0 }, { shape: 'gemini-1' })
 
 type DelegateInput = {
@@ -89,7 +90,7 @@ Reglas con Gemini:
 Elección de modelo:
 - Gemini se elige solo según rol y tarea. Usa "tier" solo si tienes una razón clara, y "model" solo si la persona nombra un modelo.
 - Para agentes de Claude, pasa el modelo por tarea: haiku para búsquedas y cambios mecánicos; sonnet para implementar y redactar; opus solo para arquitectura, seguridad, depuración difícil o decisiones costosas.
-- Si un trabajo no justifica el modelo actual de esta conversación, sugiere a la persona cambiarlo con /model.
+- El modelo de esta conversación principal cambia solo en cada turno, salvo que la persona use /cuadrilla-auto off o pida un modelo.
 
 Idioma: entiende instrucciones en español o inglés, aunque estén mezcladas, y responde en el idioma de la persona. A Gemini dale la tarea en ese mismo idioma y mantén en inglés los nombres de código.
 
@@ -121,6 +122,17 @@ const chooseTier = (input: DelegateInput): { tier: Tier; why: string } => {
   if (task.length > 6000) return { tier: 'profundo', why: 'tarea extensa' }
   if (input.role === 'gemini-copywriter' || input.role === 'gemini-documentador' || LIGHT.test(task)) return { tier: 'rapido', why: 'trabajo sencillo' }
   return { tier: 'equilibrado', why: 'trabajo general' }
+}
+
+/** El modelo de la conversación principal, elegido turno por turno. */
+const chooseMain = (text: string): MainPick => {
+  const named = NAMED.exec(text)?.[1]?.toLowerCase()
+  if (named === 'haiku') return { model: 'haiku', effort: 'low', why: 'lo pediste' }
+  if (named === 'sonnet') return { model: 'sonnet', effort: 'medium', why: 'lo pediste' }
+  if (named === 'opus') return { model: 'opus', effort: 'high', why: 'lo pediste' }
+  if (DEEP.test(text) || text.length > 4000) return { model: 'opus', effort: 'high', why: 'trabajo complejo' }
+  if (LIGHT.test(text) || text.trim().length <= 60) return { model: 'haiku', effort: 'low', why: 'pedido sencillo' }
+  return { model: 'sonnet', effort: 'medium', why: 'trabajo general' }
 }
 
 const pickModel = (models: string[], tier: Tier) => {
@@ -288,6 +300,9 @@ const fingerprints = async ($: EngineInterface, cwd: string, files: string[] | u
 }
 
 let homeDir: string | undefined
+type MainPick = { model: 'haiku' | 'sonnet' | 'opus'; effort: 'low' | 'medium' | 'high'; why: string }
+const NAMED = /\b(?:usa|use|con|with|switch to|cambia a)\s+(?:el modelo\s+|the model\s+)?(haiku|sonnet|opus)\b/i
+const SMALL_CONTEXT = 150_000
 const stopReasons = new Map<string, string>()
 let serial = 0
 let startQueue: Promise<unknown> = Promise.resolve()
@@ -528,6 +543,7 @@ export const register: Register = on => {
       isDeferred: false,
     })
     await $.command.register({ name: 'cuadrilla', description: 'Abre el panel de Cuadrilla' })
+    await $.command.register({ name: 'cuadrilla-auto', description: 'Enciende o apaga el cambio automático de modelo: on u off' })
     const { rateLimits } = await $.session.usage().catch(() => ({ rateLimits: [] as CuadrillaLimit[] }))
     await update($, limits, () => rateLimits)
     await refreshGeminiQuota($).catch(() => {})
@@ -565,6 +581,22 @@ export const register: Register = on => {
     return next(e)
   })
 
+  on('turn.start', async ($, e, next) => {
+    if (e.agentId === undefined && e.text.trim() !== '' && !e.text.startsWith('cuadrilla:')) {
+      const auto = (await $.store.get('autoModel').catch(() => undefined)) !== false
+      await update($, mainPick, () => (auto ? chooseMain(e.text) : {}))
+    }
+    return next(e)
+  })
+
+  on('turn.step', async function* ($, e, next) {
+    const pick = e.agentId === undefined ? ((await read($, mainPick)) as Partial<MainPick>) : {}
+    // Haiku y Sonnet pueden tener menos ventana: en conversaciones largas se conserva el modelo actual.
+    const used = (await $.session.usage().catch(() => undefined))?.context?.tokens ?? 0
+    if (pick.model === undefined || (pick.model !== 'opus' && used > SMALL_CONTEXT)) return yield* next(e)
+    return yield* next({ ...e, model: pick.model, ...(e.effort !== undefined && pick.model !== 'haiku' ? { effort: pick.effort } : {}) })
+  })
+
   on('session.measure', async ($, e, next) => {
     if (e.changed.includes('rateLimits')) await update($, limits, () => e.rateLimits)
     return next(e)
@@ -592,6 +624,13 @@ export const register: Register = on => {
     await $.store.set('paneClosed', false).catch(() => {})
     await $.ui.open({ id: PANE, title: 'Cuadrilla' })
     return { text: 'Panel de Cuadrilla abierto.' }
+  })
+
+  on('command.run', { command: 'cuadrilla-auto' }, async ($, e) => {
+    const off = /\boff\b/i.test(e.args ?? '')
+    await $.store.set('autoModel', !off).catch(() => {})
+    if (off) await update($, mainPick, () => ({}))
+    return { text: off ? 'Modelo automático apagado: se usa el de /model.' : 'Modelo automático encendido.' }
   })
 
   on('prompt.compose', async (_$, e, next) => {
@@ -625,6 +664,8 @@ export const register: Register = on => {
     const plan = await read($, limits)
     const busy = Object.values(await read($, team))
     const google = await read($, gemini)
+    const pick = (await read($, mainPick)) as Partial<MainPick>
+    const auto = (await $.store.get('autoModel').catch(() => undefined)) !== false
     const now = await $.clock.now()
     const working = list.filter(a => a.state === 'running')
     const LIMIT: Record<string, string> = { five_hour: '5 horas', seven_day: 'Semana', spend_limit: 'Gasto' }
@@ -660,6 +701,14 @@ export const register: Register = on => {
             ? <Text dimColor>{google.note || 'Buscando tu cuota…'}</Text>
             : google.quotas.map(q => bar(quotaName(q.id), q.percentUsed, resetIn(q.resetsAt, now))),
           <Text dimColor>{`${compact(google.sessionTokens)} tokens en esta sesión${age !== undefined && google.quotas.length > 0 ? ` · cuota de hace ${age} min` : ''}`}</Text>,
+        )}
+        {section(
+          'Modelo',
+          <Text>{auto ? (pick.model ? <Text><Text bold color={TEAL}>{pick.model[0]?.toUpperCase() + pick.model.slice(1)}</Text><Text dimColor>{` · ${pick.why}`}</Text></Text> : <Text dimColor>Automático · elige en tu próximo mensaje</Text>) : <Text dimColor>Manual · el de /model</Text>}</Text>,
+          <Button key="auto" label={auto ? 'Usar modelo manual' : 'Usar modelo automático'} onPress={() => void (async () => {
+            await $.store.set('autoModel', !auto)
+            await update($, mainPick, () => ({}))
+          })().catch(() => {})} />,
         )}
         {section(
           'Agentes activos',

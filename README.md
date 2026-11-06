@@ -135,7 +135,7 @@ La cuota de Gemini proviene de Antigravity y se actualiza cuando usas `agy` en m
 
 ## Elección inteligente de modelo
 
-Cuadrilla ajusta la potencia según la tarea. Entiende encargos en español e inglés.
+Cuadrilla ajusta la potencia según lo que pides, en español o inglés. En Claude Code cambia también el modelo de tu conversación en cada turno.
 
 | Potencia | Cuándo se usa | Gemini | Claude |
 | --- | --- | --- | --- |
@@ -143,7 +143,9 @@ Cuadrilla ajusta la potencia según la tarea. Entiende encargos en español e in
 | Equilibrado | Trabajo general | Flash, nivel alto | Sonnet |
 | Profundo | Auditorías, seguridad, arquitectura y depuración | Argon, nivel alto | Opus |
 
-Puedes forzarlo: "usa potencia profunda" o "usa el modelo X". Cuadrilla elige el modelo de Gemini por reglas; en Claude, la instrucción la aplica Claude al lanzar cada agente. Esto aplica a lo que lanza Cuadrilla. Al abrir `agy` por tu cuenta, el modelo lo eliges tú con `/model`; lo mismo pasa en tu conversación principal de Claude.
+Para elegir tú, di "usa opus" o "use sonnet". Para apagar el cambio automático, usa el botón del panel o escribe `/cuadrilla-auto off`; para encenderlo, `/cuadrilla-auto on`.
+
+En conversaciones muy largas, Cuadrilla conserva el modelo actual para no exceder la memoria de Haiku o Sonnet. Cambiar de modelo puede romper la caché y gastar más contexto. Fuera de Cuadrilla, el modelo de `agy` y del chat normal lo eliges tú.
 
 ## Dónde funciona
 
