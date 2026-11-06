@@ -145,7 +145,26 @@ Remove-Item "$HOME\Cuadrilla-IA-S" -Recurse -Force
 
 ## Security and privacy
 
-Cuadrilla has no server or telemetry. Tasks and files read by Gemini go to Google, and Claude work goes to Anthropic, under your accounts. Do not delegate secrets. See [SECURITY.md](SECURITY.md) and [PRIVACIDAD.md](PRIVACIDAD.md).
+### What it stores
+
+Cuadrilla **does not ask for or store passwords or tokens**. It has no server or telemetry. It uses the sessions you started in Claude Code and Antigravity.
+
+| Location | What stays there |
+| --- | --- |
+| Claude Code, Antigravity and Git | Their own sessions, same as without Cuadrilla |
+| `.gemini\cuadrilla-estado.json` | `agy` state, including your email and quota |
+| `.cuadrilla\` in each project | Reports and isolated copies |
+
+Gemini can read a file with secrets if a task or another file leads it there. The filter for `.env`, keys and credentials only removes them from the initial list; it does not block reading. Anything Gemini reads goes to Google, and anything Claude uses goes to Anthropic.
+
+**Protect your projects:**
+
+- Do not keep passwords or keys in code.
+- Use environment variables or a secrets manager.
+- Do not delegate tasks involving `.env`, backups or personal data.
+- If a secret reaches a report, rotate it and delete that report.
+
+See [SECURITY.md](SECURITY.md) and [PRIVACIDAD.md](PRIVACIDAD.md).
 
 ## License
 

@@ -16,4 +16,5 @@ Do not open a public issue. Use **Security > Report a vulnerability** in this re
 
 - Read-only mode detects changes in Git repositories but cannot guarantee it prevents them.
 - The secret-file filter removes common names from the file list. It does not stop an agent from reading a file.
+- Reports can contain sensitive content if an agent read it. Rotate exposed secrets and delete the report.
 - Installing any plugin runs code with your user permissions. Review updates before installing them.

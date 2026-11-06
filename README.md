@@ -349,6 +349,27 @@ Son 101, disponibles para Claude y Gemini. Las listadas abajo son las principale
 
 </details>
 
+## Seguridad y privacidad
+
+Cuadrilla **no pide ni guarda contraseñas o tokens**. No tiene servidor ni telemetría. Usa las sesiones que tú iniciaste en Claude Code y Antigravity.
+
+| Dónde | Qué queda |
+| --- | --- |
+| Claude Code, Antigravity y Git | Sus propias sesiones, igual que sin Cuadrilla |
+| `.gemini\cuadrilla-estado.json` | Estado de `agy`, con tu correo y tu cuota |
+| `.cuadrilla\` en cada proyecto | Informes y copias aisladas |
+
+Gemini puede leer un archivo con secretos si la tarea o algún archivo lo lleva a abrirlo. El filtro de `.env`, llaves y credenciales solo los quita de la lista inicial; no bloquea la lectura. Lo que lea Gemini se envía a Google, y lo que use Claude, a Anthropic.
+
+**Protege tus proyectos:**
+
+- No guardes contraseñas ni claves en el código.
+- Usa variables de entorno o un gestor de secretos.
+- No delegues tareas con `.env`, respaldos ni datos personales.
+- Si un secreto llegó a un informe, cámbialo y borra ese informe.
+
+Consulta también la [política de seguridad](SECURITY.md) y el [aviso de privacidad y condiciones de uso](PRIVACIDAD.md).
+
 ## Mapa del proyecto
 
 ```text
