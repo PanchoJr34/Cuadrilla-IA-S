@@ -263,8 +263,9 @@ const refreshGeminiQuota = async ($: EngineInterface) => {
   } catch {
     return report('Abre agy un momento: la cuota aún no está completa.')
   }
+  const nowMs = await $.clock.now()
   const quotas: GeminiQuota[] = Object.entries(data.quota ?? {}).flatMap(([id, q]) =>
-    typeof q.remaining_fraction === 'number' && !q.disabled ? [{ id, percentUsed: Math.round((1 - q.remaining_fraction) * 100), ...(q.reset_time ? { resetsAt: q.reset_time } : {}) }] : [],
+    typeof q.remaining_fraction === 'number' && !q.disabled && !(q.reset_time && new Date(q.reset_time).getTime() < nowMs) ? [{ id, percentUsed: Math.round((1 - q.remaining_fraction) * 100), ...(q.reset_time ? { resetsAt: q.reset_time } : {}) }] : [],
   )
   // Al abrir agy el archivo se escribe primero sin cuota: se conserva la última conocida.
   if (quotas.length === 0) {
@@ -375,11 +376,10 @@ const runAgent = async ($: EngineInterface, id: string, input: DelegateInput, pr
   const changed = input.write === true ? (after ?? []) : [...(after ?? []).filter(f => !(before ?? []).includes(f)), ...touched]
   const projectAfter = input.write === true ? await changedFiles($, projectDir) : undefined
   const escaped = (projectAfter ?? []).filter(f => !(projectBefore ?? []).includes(f))
-  const broke = (input.write !== true && changed.length > 0) || escaped.length > 0
+  // Claude o la persona pueden editar el proyecto a la vez: un cambio fuera de la copia es un aviso, no un fallo.
+  const broke = input.write !== true && changed.length > 0
   const failed = error !== '' || (code !== null && code !== 0) || report === '' || broke
-  const problem = escaped.length > 0
-    ? `el agente cambió archivos fuera de su copia aislada: ${escaped.join(', ')}`
-    : broke
+  const problem = broke
     ? `un agente de solo lectura cambió archivos: ${changed.join(', ')}`
     : error || (code !== null && code !== 0 ? `salió con código ${code}: ${oneLine(stderr, 300)}` : report === '' ? 'terminó sin informe' : '')
   const denied = stderr.split('\n').filter(l => /denied|permission|approval/i.test(l)).slice(-5)
@@ -388,7 +388,7 @@ const runAgent = async ($: EngineInterface, id: string, input: DelegateInput, pr
 - Estado: ${wasStopped ? 'detenido' : failed ? 'falló' : 'terminó'}
 - Modelo: ${input.model ?? 'predeterminado de agy'}
 - Modo: ${input.write === true ? `escritura aislada en ${me?.worktree}, rama ${me?.branch}` : 'solo lectura'}
-${problem ? `- Problema: ${problem}\n` : ''}${changed.length > 0 ? `- Archivos cambiados: ${changed.join(', ')}\n` : ''}${denied.length > 0 ? `- Acciones negadas:\n${denied.map(l => `  - ${oneLine(l, 500)}`).join('\n')}\n` : ''}
+${problem ? `- Problema: ${problem}\n` : ''}${changed.length > 0 ? `- Archivos cambiados: ${changed.join(', ')}\n` : ''}${escaped.length > 0 ? `- Aviso: durante el trabajo también cambiaron archivos del proyecto principal (${escaped.join(', ')}). Pueden ser tuyos o de Claude; revísalos antes de integrar.\n` : ''}${denied.length > 0 ? `- Acciones negadas:\n${denied.map(l => `  - ${oneLine(l, 500)}`).join('\n')}\n` : ''}
 ## Tarea
 ${input.task}
 

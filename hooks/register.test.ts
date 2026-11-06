@@ -245,7 +245,7 @@ test('si Gemini termina con error, el trabajo falla', async ($, on) => {
   expect(s.submitted[0]).toContain('falló')
 })
 
-test('avisa si un agente cambia archivos fuera de su copia', async ($, on) => {
+test('cambios en el proyecto principal son aviso, no fallo', async ($, on) => {
   let main = 0
   const s = await setup($, on, { git: (a) => {
     const inMain = a[3] === 'status' && !(a as any).worktree
@@ -253,7 +253,9 @@ test('avisa si un agente cambia archivos fuera de su copia', async ($, on) => {
   } })
   const id = idOf((await $.tool.call({ tool: TOOL, task: 'Edita', write: true, role: 'gemini-frontend' })).result)
   await settle(); s.release(); await settle()
-  expect(String((await $.tool.call({ tool: TOOL, action: 'result', id })).result)).toContain('fuera de su copia aislada')
+  const read = String((await $.tool.call({ tool: TOOL, action: 'result', id })).result)
+  expect(read).toContain('también cambiaron archivos del proyecto principal')
+  expect(read).toContain('Estado: terminó')
 })
 
 test('elige modelo según tarea y respeta el indicado', async ($, on) => {
