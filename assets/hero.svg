@@ -1,0 +1,36 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 420" role="img" aria-labelledby="t d">
+<title id="t">Cuadrilla IA</title><desc id="d">Claude y Gemini trabajando como un solo equipo</desc>
+<defs>
+<linearGradient id="bg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#0E1419"/><stop offset="1" stop-color="#17232B"/></linearGradient>
+<pattern id="grid" width="36" height="36" patternUnits="userSpaceOnUse"><path d="M36 0H0V36" fill="none" stroke="#2A3640" stroke-width="1" opacity=".55"/></pattern>
+<linearGradient id="w" x1="0" x2="1"><stop offset="0" stop-color="#F5A524"/><stop offset="1" stop-color="#2DD4BF"/></linearGradient>
+<style>
+.h{font:800 74px "Segoe UI",Arial,sans-serif;fill:#EDF2F4}
+.s{font:500 24px "Segoe UI",Arial,sans-serif;fill:#B8C7CF}
+.l{font:700 15px "Segoe UI",Arial,sans-serif}
+.tag{font:600 15px "Segoe UI",Arial,sans-serif;fill:#9FB0BA;letter-spacing:2px}
+.link{fill:none;stroke-width:2;stroke-dasharray:7 9;animation:f 2.2s linear infinite}
+.pulse{animation:p 2.4s ease-in-out infinite;transform-box:fill-box;transform-origin:center}
+.d2{animation-delay:.5s}.d3{animation-delay:1s}
+.u{animation:r .9s ease-out both}
+@keyframes f{to{stroke-dashoffset:-32}}
+@keyframes p{50%{opacity:.35;transform:scale(1.35)}}
+@keyframes r{from{opacity:0;transform:translateY(12px)}}
+@media (prefers-reduced-motion:reduce){*{animation:none!important}}
+</style></defs>
+<rect width="1200" height="420" rx="18" fill="url(#bg)"/><rect width="1200" height="420" rx="18" fill="url(#grid)"/>
+<g class="u"><text x="70" y="92" class="tag">CLAUDE CODE PLUGIN · WINDOWS</text>
+<text x="70" y="182" class="h">Cuadrilla IA</text>
+<rect x="72" y="204" width="178" height="5" rx="2.5" fill="url(#w)"/>
+<text x="70" y="256" class="s">Claude y Gemini trabajando como un solo equipo.</text>
+<text x="70" y="292" class="s">Para crear, mejorar y lanzar productos web.</text>
+<text x="70" y="352" class="tag">15 AGENTES · 101 SKILLS · ES + EN</text></g>
+<g transform="translate(700 60)">
+<path class="link" stroke="#2DD4BF" d="M180 150C110 150 110 58 40 58"/><path class="link" stroke="#2DD4BF" d="M180 150H40"/><path class="link" stroke="#2DD4BF" d="M180 150C110 150 110 242 40 242"/>
+<path class="link" stroke="#60A5FA" d="M260 150C330 150 330 58 400 58"/><path class="link" stroke="#60A5FA" d="M260 150H400"/><path class="link" stroke="#60A5FA" d="M260 150C330 150 330 242 400 242"/>
+<circle cx="220" cy="150" r="72" fill="#F5A524" opacity=".12" class="pulse"/><circle cx="220" cy="150" r="50" fill="#F5A524"/>
+<text x="220" y="146" text-anchor="middle" font-family="Segoe UI,Arial" font-weight="800" font-size="16" fill="#10151A">TÚ</text><text x="220" y="165" text-anchor="middle" font-family="Segoe UI,Arial" font-weight="600" font-size="12" fill="#10151A">apruebas</text>
+<g class="l"><circle cx="30" cy="58" r="20" fill="#2DD4BF" class="pulse"/><circle cx="30" cy="150" r="20" fill="#2DD4BF" class="pulse d2"/><circle cx="30" cy="242" r="20" fill="#2DD4BF" class="pulse d3"/>
+<circle cx="410" cy="58" r="20" fill="#60A5FA" class="pulse d3"/><circle cx="410" cy="150" r="20" fill="#60A5FA" class="pulse"/><circle cx="410" cy="242" r="20" fill="#60A5FA" class="pulse d2"/>
+<text x="30" y="296" text-anchor="middle" fill="#2DD4BF">CLAUDE</text><text x="410" y="296" text-anchor="middle" fill="#60A5FA">GEMINI</text></g></g>
+</svg>

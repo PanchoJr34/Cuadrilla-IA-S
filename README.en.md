@@ -1,16 +1,21 @@
 <div align="center">
 
-# Cuadrilla IA
+<img src="assets/hero.svg" alt="Cuadrilla IA: Claude and Gemini working as one team" width="100%">
 
-**Your Claude and Gemini agent crew for building, improving and launching web products.**
-
-Claude Code plugin for Windows · 15 agents · 101 skills · English and Spanish · No WSL
+<a href="LICENSE"><img alt="MIT License" src="https://img.shields.io/badge/license-MIT-2DD4BF?style=for-the-badge&labelColor=10151A"></a>
+<img alt="Windows 10 and 11" src="https://img.shields.io/badge/Windows-10%20%7C%2011-60A5FA?style=for-the-badge&labelColor=10151A">
+<img alt="Claude Code plugin" src="https://img.shields.io/badge/Claude%20Code-plugin-F5A524?style=for-the-badge&labelColor=10151A">
+<img alt="Gemini through Antigravity CLI" src="https://img.shields.io/badge/Gemini-Antigravity%20CLI-60A5FA?style=for-the-badge&labelColor=10151A">
 
 [Español](README.md) · **English**
 
 [Quick start](#quick-start) · [How it works](#how-it-works) · [Prompts](docs/prompts.en.md) · [Security](SECURITY.md)
 
 </div>
+
+| 🤖 Agents | 🧠 Skills | 🗂️ Work areas | ⚡ Actions | 🌎 Languages |
+| :--: | :--: | :--: | :--: | :--: |
+| **15** | **101** | **6** | **34** | **ES + EN** |
 
 ---
 
@@ -61,6 +66,12 @@ git clone https://github.com/PanchoJr34/Cuadrilla-IA-S.git "$HOME\Cuadrilla-IA-S
 ```
 
 Keep that folder. Restart Claude Code, open a project and type `/cuadrilla`.
+
+## The panel
+
+Track usage, model choice, agents and jobs from Claude Code.
+
+<p align="center"><img src="assets/panel.svg" alt="Illustration of the Cuadrilla panel" width="92%"></p>
 
 ## What you get
 

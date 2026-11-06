@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 470" role="img" aria-labelledby="t d">
+<title id="t">Panel de Cuadrilla</title><desc id="d">Ilustración del panel con capacidad, modelo, agentes y áreas de trabajo</desc>
+<style>.t{font:700 15px "Segoe UI",Arial,sans-serif;fill:#F5A524;letter-spacing:1px}.b{font:500 15px "Segoe UI",Arial,sans-serif;fill:#EDF2F4}.m{font:400 13px "Segoe UI",Arial,sans-serif;fill:#9FB0BA}.g{animation:g 1.4s ease-out both}.blink{animation:b 1.5s infinite}@keyframes g{from{width:0}}@keyframes b{50%{opacity:.25}}@media (prefers-reduced-motion:reduce){*{animation:none!important}}</style>
+<rect width="960" height="470" rx="14" fill="#10151A"/><rect x="1" y="1" width="958" height="468" rx="14" fill="none" stroke="#2A3640"/>
+<circle cx="26" cy="24" r="6" fill="#F5A524"/><text x="42" y="30" class="t">CUADRILLA</text><text x="146" y="30" class="m">3 en obra ahora</text><line x1="20" x2="940" y1="50" y2="50" stroke="#2A3640"/>
+<g transform="translate(24 78)"><text class="t">CAPACIDAD</text>
+<text y="34" class="b">Claude · 5 horas</text><text x="360" y="34" class="m" text-anchor="end">28%</text><rect y="44" width="360" height="9" rx="4" fill="#26323B"/><rect class="g" y="44" width="101" height="9" rx="4" fill="#2DD4BF"/>
+<text y="86" class="b">Claude · semana</text><text x="360" y="86" class="m" text-anchor="end">27%</text><rect y="96" width="360" height="9" rx="4" fill="#26323B"/><rect class="g" y="96" width="97" height="9" rx="4" fill="#2DD4BF"/>
+<text y="138" class="b">Gemini · 5 horas</text><text x="360" y="138" class="m" text-anchor="end">1%</text><rect y="148" width="360" height="9" rx="4" fill="#26323B"/><rect class="g" y="148" width="8" height="9" rx="4" fill="#60A5FA"/>
+<text y="190" class="b">Argon · semana</text><text x="360" y="190" class="m" text-anchor="end">13%</text><rect y="200" width="360" height="9" rx="4" fill="#26323B"/><rect class="g" y="200" width="47" height="9" rx="4" fill="#60A5FA"/>
+<text y="256" class="t">MODELO</text><text y="284" class="b">Opus</text><text x="46" y="284" class="m">· trabajo complejo</text></g>
+<g transform="translate(450 78)"><text class="t">AGENTES ACTIVOS</text>
+<circle cx="6" cy="29" r="5" fill="#60A5FA" class="blink"/><text x="20" y="34" class="b">Auditor web</text><text x="130" y="34" class="m">· Profundo</text>
+<circle cx="6" cy="57" r="5" fill="#60A5FA" class="blink"/><text x="20" y="62" class="b">Copywriter</text><text x="130" y="62" class="m">· Rápido</text>
+<circle cx="6" cy="85" r="5" fill="#2DD4BF" class="blink"/><text x="20" y="90" class="b">revisor-seguridad</text><text x="170" y="90" class="m">· Claude</text>
+<text y="136" class="t">TRABAJAR EN</text>
+<g font-family="Segoe UI,Arial" font-size="13" font-weight="600"><rect y="150" width="110" height="30" rx="7" fill="#F5A524"/><text x="55" y="170" text-anchor="middle" fill="#10151A">Marketing</text>
+<g fill="#EDF2F4"><rect x="120" y="150" width="104" height="30" rx="7" fill="#1E2A33"/><text x="172" y="170" text-anchor="middle">Desarrollo</text><rect x="234" y="150" width="84" height="30" rx="7" fill="#1E2A33"/><text x="276" y="170" text-anchor="middle">Diseño</text><rect x="328" y="150" width="104" height="30" rx="7" fill="#1E2A33"/><text x="380" y="170" text-anchor="middle">Contenido</text>
+<rect y="196" width="74" height="30" rx="7" fill="#1E2A33"/><text x="37" y="216" text-anchor="middle">SEO</text><rect x="84" y="196" width="104" height="30" rx="7" fill="#1E2A33"/><text x="136" y="216" text-anchor="middle">Conversión</text><rect x="198" y="196" width="92" height="30" rx="7" fill="#1E2A33"/><text x="244" y="216" text-anchor="middle">Anuncios</text><rect x="300" y="196" width="132" height="30" rx="7" fill="#1E2A33"/><text x="366" y="216" text-anchor="middle">Lanzamiento</text></g></g></g>
+<text x="24" y="444" class="m">Ilustración con datos de ejemplo. Los valores reales dependen de tu cuenta.</text>
+</svg>

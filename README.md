@@ -1,16 +1,21 @@
 <div align="center">
 
-# Cuadrilla IA
+<img src="assets/hero.svg" alt="Cuadrilla IA: Claude y Gemini trabajando como un solo equipo" width="100%">
 
-**Tu equipo de agentes de Claude y Gemini para crear, mejorar y lanzar productos web.**
-
-Plugin para Claude Code en Windows · 15 agentes · 101 skills · Español e inglés · Sin WSL
+<a href="LICENSE"><img alt="MIT License" src="https://img.shields.io/badge/license-MIT-2DD4BF?style=for-the-badge&labelColor=10151A"></a>
+<img alt="Windows 10 and 11" src="https://img.shields.io/badge/Windows-10%20%7C%2011-60A5FA?style=for-the-badge&labelColor=10151A">
+<img alt="Claude Code plugin" src="https://img.shields.io/badge/Claude%20Code-plugin-F5A524?style=for-the-badge&labelColor=10151A">
+<img alt="Gemini through Antigravity CLI" src="https://img.shields.io/badge/Gemini-Antigravity%20CLI-60A5FA?style=for-the-badge&labelColor=10151A">
 
 **Español** · [English](README.en.md)
 
 [Empezar](#empezar-en-10-minutos) · [Cómo funciona](#cómo-funciona) · [Prompts](docs/prompts.md) · [Privacidad](PRIVACIDAD.md)
 
 </div>
+
+| 🤖 Agentes | 🧠 Skills | 🗂️ Áreas | ⚡ Acciones | 🌎 Idiomas |
+| :--: | :--: | :--: | :--: | :--: |
+| **15** | **101** | **6** | **34** | **ES + EN** |
 
 ---
 
@@ -120,6 +125,12 @@ Audita este proyecto en solo lectura. gemini-auditor-web revisa la estructura, g
 ```
 
 Si algo falla, corre `cmd /c "$HOME\Cuadrilla-IA-S\verificar.cmd"`.
+
+## El panel
+
+Mira capacidad, modelo, agentes y trabajos sin salir de Claude Code.
+
+<p align="center"><img src="assets/panel.svg" alt="Ilustración del panel de Cuadrilla" width="92%"></p>
 
 ## Lo que ves en el panel
 
