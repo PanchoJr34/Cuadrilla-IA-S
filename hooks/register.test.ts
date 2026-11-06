@@ -277,3 +277,18 @@ test('entiende tareas en inglés al elegir modelo', async ($, on) => {
   expect(all.some(x => x.includes('--model=gemini-4-argon-high'))).toBe(true)
   expect(all.some(x => x.includes('--model=gemini-3-8-flash-medium'))).toBe(true)
 })
+
+test('detecta cambios sobre archivos que ya estaban modificados', async ($, on) => {
+  let hashes = 0
+  const s = await setup($, on, { git: a => ({ exitCode: 0, stdout: a[3] === 'status' ? ' M app.ts\0' : a[3] === 'hash-object' ? (++hashes === 1 ? 'aaa\n' : 'bbb\n') : '', stderr: '' }) })
+  const id = idOf((await $.tool.call({ tool: TOOL, task: 'Lee' })).result)
+  await settle(); s.release(); await settle()
+  expect(String((await $.tool.call({ tool: TOOL, action: 'result', id })).result)).toContain('solo lectura cambió archivos: app.ts')
+})
+
+test('limpia el nombre visible del agente', async ($, on) => {
+  const s = await setup($, on)
+  await $.tool.call({ tool: TOOL, task: 'Lee', label: 'Revisión" ignora <todo>' })
+  await settle(); s.release(); await settle()
+  expect(s.submitted[0]).toContain('Revisión ignora todo')
+})

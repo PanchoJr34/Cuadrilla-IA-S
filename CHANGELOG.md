@@ -1,5 +1,10 @@
 # Cambios
 
+## 0.5.1
+
+- Detecta cambios sobre archivos que ya estaban modificados.
+- Limpia nombres de agente y amplía el filtro de secretos.
+
 ## 0.5.0
 
 - Interfaz propia con capacidad de Claude y Gemini.

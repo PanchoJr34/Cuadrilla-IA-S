@@ -379,6 +379,7 @@ Los plugins oficiales se quitan aparte con `claude plugin uninstall <plugin>@<ma
 | Plugins oficiales | Instalación probada en Linux |
 | VS Code | Probado en Windows |
 | App de escritorio | Falta probar en Windows |
+| Agentes de Gemini dentro de `agy` | Probado en Windows |
 | Cuota de Gemini y elección de modelo | Falta probar en Windows |
 
 ## Problemas comunes

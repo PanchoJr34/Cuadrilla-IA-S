@@ -34,7 +34,7 @@ type Tier = 'rapido' | 'equilibrado' | 'profundo'
 const TIER_NAME: Record<Tier, string> = { rapido: 'Rápido', equilibrado: 'Equilibrado', profundo: 'Profundo' }
 const DEEP = /arquitect|architect|seguridad|security|vulnerab|autentic|authenti|migraci|migrat|refactor|auditor|audit|depura|debug|rendimiento|performance|base de datos|database|legal|contrato|contract/i
 const LIGHT = /resum|summar|traduc|translat|\blista\b|\blist\b|borrador|draft|variantes|variants|ortograf|spelling|renombr|rename|formato|format/i
-const SECRET_FILE = /(^|\/)(\.env(\..*)?|\.npmrc|\.netrc|\.pypirc|.*\.(pem|key|pfx|p12|jks|keystore)|id_(rsa|ed25519)(\.pub)?|credentials(\.json)?|secrets?\.(json|ya?ml)|.*service[-_]?account.*\.json)$/i
+const SECRET_FILE = /(^|\/)(\.env(\..*)?|\.npmrc|\.netrc|\.pypirc|.*\.(pem|key|pfx|p12|jks|keystore)|id_(rsa|ed25519)(\.pub)?|credentials(\.json)?|secrets?\.(json|ya?ml)|\.git-credentials|kubeconfig|.*\.tfvars|.*service[-_]?account.*\.json)$/i
 const SKIP_DIRS = new Set(['.git', '.cuadrilla', '.orchestra', 'node_modules', 'dist', 'build', 'out', 'bin', 'obj', 'target', '.next', '.venv', 'venv', '__pycache__', '.gradle', '.idea', '.vs'])
 
 const agents = atom({ plugin: 'cuadrilla', key: 'agents' } as const, [], { shape: 'agents-1' })
@@ -270,6 +270,15 @@ const projectFiles = async ($: EngineInterface, cwd: string) => {
 
 type Running = { stop: () => void; startedAt: number; lastAt: number }
 const running = new Map<string, Running>()
+/** Huella de archivos ya modificados, para notar si un agente los vuelve a cambiar. */
+const fingerprints = async ($: EngineInterface, cwd: string, files: string[] | undefined) => {
+  const list = (files ?? []).slice(0, 200)
+  if (list.length === 0) return new Map<string, string>()
+  const hashed = await git($, ['hash-object', '--', ...list], cwd)
+  const lines = hashed.isOk ? hashed.stdout.split('\n').map(l => l.trim()).filter(Boolean) : []
+  return new Map(lines.length === list.length ? list.map((f, i) => [f, lines[i] as string]) : [])
+}
+
 const stopReasons = new Map<string, string>()
 let serial = 0
 let startQueue: Promise<unknown> = Promise.resolve()
@@ -279,6 +288,7 @@ const runAgent = async ($: EngineInterface, id: string, input: DelegateInput, pr
   const cwd = me?.worktree ?? projectDir
   // Sirve para notar si un agente de solo lectura cambió algo que antes no lo estaba.
   const before = await changedFiles($, cwd)
+  const beforeHashes = input.write === true ? new Map<string, string>() : await fingerprints($, cwd, before)
   const projectBefore = input.write === true ? await changedFiles($, projectDir) : undefined
   const files = await projectFiles($, cwd)
   let buffer = ''
@@ -329,7 +339,9 @@ const runAgent = async ($: EngineInterface, id: string, input: DelegateInput, pr
   if (stopReason) error = stopReason
   const report = (finalText || streamed).trim()
   const after = await changedFiles($, cwd)
-  const changed = input.write === true ? (after ?? []) : (after ?? []).filter(f => !(before ?? []).includes(f))
+  const afterHashes = input.write === true ? new Map<string, string>() : await fingerprints($, cwd, [...beforeHashes.keys()])
+  const touched = [...beforeHashes].filter(([file, hash]) => afterHashes.has(file) && afterHashes.get(file) !== hash).map(([file]) => file)
+  const changed = input.write === true ? (after ?? []) : [...(after ?? []).filter(f => !(before ?? []).includes(f)), ...touched]
   const projectAfter = input.write === true ? await changedFiles($, projectDir) : undefined
   const escaped = (projectAfter ?? []).filter(f => !(projectBefore ?? []).includes(f))
   const broke = (input.write !== true && changed.length > 0) || escaped.length > 0
@@ -396,7 +408,7 @@ const startNow = async ($: EngineInterface, input: DelegateInput) => {
   serial += 1
   const n = serial
   const id = `agy-${n}-${stamp(await $.clock.now())}`
-  const label = oneLine(input.label?.trim() || `gemini-${n}`, 60)
+  const label = oneLine((input.label ?? '').replace(/[^\p{L}\p{N} ._-]/gu, '').trim() || `gemini-${n}`, 60)
   if (!(await $.fs.exists(`${DIR}/.gitignore`).catch(() => false))) await $.fs.write(`${DIR}/.gitignore`, '*\n')
 
   let isolated: { branch: string; worktree: string } | undefined
