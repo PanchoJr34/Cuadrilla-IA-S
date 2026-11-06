@@ -4,6 +4,7 @@
 
 <a href="LICENSE"><img alt="MIT License" src="https://img.shields.io/badge/license-MIT-2DD4BF?style=for-the-badge&labelColor=10151A"></a>
 <img alt="Windows 10 and 11" src="https://img.shields.io/badge/Windows-10%20%7C%2011-60A5FA?style=for-the-badge&labelColor=10151A">
+<img alt="macOS 13 or later" src="https://img.shields.io/badge/macOS-13%2B-A3A3A3?style=for-the-badge&labelColor=10151A">
 <img alt="Claude Code plugin" src="https://img.shields.io/badge/Claude%20Code-plugin-F5A524?style=for-the-badge&labelColor=10151A">
 <img alt="Gemini through Antigravity CLI" src="https://img.shields.io/badge/Gemini-Antigravity%20CLI-60A5FA?style=for-the-badge&labelColor=10151A">
 
@@ -21,7 +22,7 @@
 
 ## Technical overview
 
-Cuadrilla is a Claude Code plugin for multi-agent orchestration on Windows. It registers an MCP delegation tool, a status panel and routing hooks. It launches Antigravity CLI agents without a shell, isolates writes with `git worktree`, selects models per turn and treats output from other models as untrusted data.
+Cuadrilla is a Claude Code plugin for multi-agent orchestration on Windows and macOS. It registers an MCP delegation tool, a status panel and routing hooks. It launches Antigravity CLI agents without a shell, isolates writes with `git worktree`, selects models per turn and treats output from other models as untrusted data.
 
 ## What it is
 
@@ -39,7 +40,7 @@ Cuadrilla turns Claude Code into an AI team for web work. Instead of asking one 
 
 ### When it fits
 
-- You work on Windows with Claude Code.
+- You work on Windows or macOS with Claude Code.
 - You build sites, landing pages, digital products, SEO or campaigns.
 - You want to get more out of your Claude and Google plans.
 - You prefer to approve every important change.
@@ -47,7 +48,7 @@ Cuadrilla turns Claude Code into an AI team for web work. Instead of asking one 
 ### When it does not
 
 - You only need a chat for quick questions.
-- You work on macOS or Linux: Cuadrilla is built for Windows.
+- You work on Linux: Cuadrilla ships installers for Windows and macOS.
 - You cannot send your code or data to Anthropic or Google.
 
 ## How it works
@@ -93,6 +94,24 @@ git clone https://github.com/PanchoJr34/Cuadrilla-IA-S.git "$HOME\Cuadrilla-IA-S
 ```
 
 Keep that folder. Restart Claude Code, open a project and type `/cuadrilla`.
+
+### macOS
+
+Requirements: macOS 13 Ventura or later, Apple Silicon or Intel, 4 GB of RAM or more, Git (from the Xcode command line tools), Claude Code and Antigravity CLI. No Homebrew, Python or Node.js needed.
+
+```bash
+xcode-select --install
+curl -fsSL https://claude.ai/install.sh | bash
+curl -fsSL https://antigravity.google/cli/install.sh | bash
+```
+
+Open a new Terminal window and sign in once with `claude` and `agy`. If either command is not found, add `~/.local/bin` to your `PATH`. Then install Cuadrilla:
+
+```bash
+git clone https://github.com/PanchoJr34/Cuadrilla-IA-S.git ~/Cuadrilla-IA-S && bash ~/Cuadrilla-IA-S/instalar.sh
+```
+
+If something fails, run `bash ~/Cuadrilla-IA-S/verificar.sh`. To update, run `git -C ~/Cuadrilla-IA-S pull && bash ~/Cuadrilla-IA-S/instalar.sh`.
 
 ## The panel
 

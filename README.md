@@ -4,12 +4,13 @@
 
 <a href="LICENSE"><img alt="MIT License" src="https://img.shields.io/badge/license-MIT-2DD4BF?style=for-the-badge&labelColor=10151A"></a>
 <img alt="Windows 10 and 11" src="https://img.shields.io/badge/Windows-10%20%7C%2011-60A5FA?style=for-the-badge&labelColor=10151A">
+<img alt="macOS 13 or later" src="https://img.shields.io/badge/macOS-13%2B-A3A3A3?style=for-the-badge&labelColor=10151A">
 <img alt="Claude Code plugin" src="https://img.shields.io/badge/Claude%20Code-plugin-F5A524?style=for-the-badge&labelColor=10151A">
 <img alt="Gemini through Antigravity CLI" src="https://img.shields.io/badge/Gemini-Antigravity%20CLI-60A5FA?style=for-the-badge&labelColor=10151A">
 
 **Español** · [English](README.en.md)
 
-[Empezar](#empezar-en-10-minutos) · [Cómo funciona](#cómo-funciona) · [Prompts](docs/prompts.md) · [Privacidad](PRIVACIDAD.md)
+[Empezar](#empezar-en-10-minutos) · [macOS](#instalar-en-macos) · [Cómo funciona](#cómo-funciona) · [Prompts](docs/prompts.md) · [Privacidad](PRIVACIDAD.md)
 
 </div>
 
@@ -21,7 +22,7 @@
 
 ## Descripción técnica
 
-Cuadrilla es un plugin de Claude Code para orquestación multiagente en Windows. Registra una herramienta MCP de delegación, un panel de estado y hooks de enrutamiento. Lanza agentes de Antigravity CLI sin shell, aísla la escritura con `git worktree`, selecciona modelos por turno y trata la salida de otros modelos como datos no confiables.
+Cuadrilla es un plugin de Claude Code para orquestación multiagente en Windows y macOS. Registra una herramienta MCP de delegación, un panel de estado y hooks de enrutamiento. Lanza agentes de Antigravity CLI sin shell, aísla la escritura con `git worktree`, selecciona modelos por turno y trata la salida de otros modelos como datos no confiables.
 
 ## De qué trata
 
@@ -39,7 +40,7 @@ Cuadrilla convierte a Claude Code en un equipo de IA para trabajo web. En lugar 
 
 ### Cuándo te conviene
 
-- Trabajas en Windows con Claude Code.
+- Trabajas en Windows o macOS con Claude Code.
 - Haces sitios, landings, productos digitales, SEO o campañas.
 - Quieres aprovechar tus planes de Claude y Google.
 - Prefieres aprobar cada cambio importante.
@@ -47,7 +48,7 @@ Cuadrilla convierte a Claude Code en un equipo de IA para trabajo web. En lugar 
 ### Cuándo no
 
 - Si solo necesitas un chat para preguntas rápidas.
-- Si trabajas en macOS o Linux: Cuadrilla está hecha para Windows.
+- Si trabajas en Linux: Cuadrilla tiene instalador para Windows y macOS.
 - Si no puedes enviar tu código o datos a Anthropic o Google.
 
 ## Cómo funciona
@@ -73,6 +74,8 @@ Un ejemplo real:
 4. Claude cruza los informes, comprueba lo importante y te entrega un plan con prioridades.
 
 ## Empezar en 10 minutos
+
+> ¿Usas Mac? Sigue [Instalar en macOS](#instalar-en-macos). Los pasos de abajo son para Windows.
 
 ### 1. Revisa lo que necesitas
 
@@ -146,6 +149,85 @@ Audita este proyecto en solo lectura. gemini-auditor-web revisa la estructura, g
 ```
 
 Si algo falla, corre `cmd /c "$HOME\Cuadrilla-IA-S\verificar.cmd"`.
+
+## Instalar en macOS
+
+Cuadrilla funciona igual en Mac: el plugin, los agentes y las skills son los mismos. Solo cambian el instalador y el verificador, que en macOS son `instalar.sh` y `verificar.sh`.
+
+### Versiones compatibles
+
+| Necesitas | Versión | Para qué |
+| --- | --- | --- |
+| macOS | 13 Ventura o posterior | Mínimo que pide Claude Code |
+| Procesador | Apple Silicon (M1 o posterior) o Intel | Claude Code tiene versión para ambos |
+| Memoria | 4 GB de RAM o más | Requisito de Claude Code |
+| Terminal | Terminal o iTerm con zsh (la de siempre) o bash | Los scripts usan bash, que ya viene en macOS |
+| Git | El de las herramientas de Xcode | Copias aisladas con `git worktree` |
+| Claude Code | Versión actual, con cuenta Pro, Max, Team o Enterprise | Claude y sus agentes |
+| Antigravity CLI (`agy`) | Versión actual, con cuenta de Google | Equipo Gemini |
+
+No necesitas Homebrew, Python ni Node.js. Para editar la configuración de Antigravity el instalador usa el JavaScript integrado en macOS (`osascript`).
+
+### 1. Instala las herramientas
+
+Abre **Terminal** y corre estos comandos, uno por uno:
+
+```bash
+xcode-select --install
+curl -fsSL https://claude.ai/install.sh | bash
+curl -fsSL https://antigravity.google/cli/install.sh | bash
+```
+
+Si ya tienes Git, el primer comando te avisa y no hace nada. Si prefieres Homebrew: `brew install --cask claude-code` y `brew install --cask antigravity-cli`.
+
+Cierra la Terminal y abre una nueva. Si `claude` o `agy` no se reconocen, agrega `~/.local/bin` a tu `PATH`:
+
+```bash
+echo 'export PATH="$HOME/.local/bin:$PATH"' >> ~/.zshrc && source ~/.zshrc
+```
+
+### 2. Inicia sesión
+
+Igual que en Windows: corre `claude` y entra con tu cuenta de Claude, luego corre `agy` y entra con tu cuenta de Google. Sal de cada uno con `/exit`. Comprueba Gemini con:
+
+```bash
+agy -p "Responde solo: OK" --output-format json
+```
+
+### 3. Instala Cuadrilla
+
+```bash
+git clone https://github.com/PanchoJr34/Cuadrilla-IA-S.git ~/Cuadrilla-IA-S && bash ~/Cuadrilla-IA-S/instalar.sh
+```
+
+El instalador hace lo mismo que en Windows: agrega Cuadrilla, te pregunta por los plugins oficiales e instala el equipo Gemini. No borres esa carpeta.
+
+### 4. Pruébala
+
+```bash
+cd ~/ruta/de/tu/proyecto
+claude
+```
+
+Escribe `/cuadrilla` y usa el mismo prompt de prueba del paso 5 de Windows. Si algo falla, corre `bash ~/Cuadrilla-IA-S/verificar.sh`.
+
+### Actualizar y desinstalar en macOS
+
+```bash
+# Actualizar
+git -C ~/Cuadrilla-IA-S pull && bash ~/Cuadrilla-IA-S/instalar.sh
+
+# Desinstalar
+claude plugin uninstall cuadrilla@cuadrilla
+claude plugin marketplace remove cuadrilla
+agy plugin uninstall cuadrilla
+rm -rf ~/Cuadrilla-IA-S
+```
+
+### Notas para Mac
+
+- La cuota de Gemini en el panel se activa con `gemini/activar-cuota.sh`. Guarda un respaldo de tu configuración en `~/.gemini/antigravity-cli/settings.json.cuadrilla.bak` antes de cambiarla. Si Antigravity ya tiene una barra de estado propia, no la toca y la cuota no aparece en el panel; el resto de Cuadrilla funciona igual.
+- La ventana de consola que aparece un momento en Windows no aparece en Mac.
 
 ## El panel
 
@@ -428,9 +510,9 @@ Los plugins oficiales se quitan aparte con `claude plugin uninstall <plugin>@<ma
 
 | Mensaje | Solución |
 | --- | --- |
-| No se reconoce `claude` o `agy` | Abre una terminal nueva o reinicia sesión en Windows |
+| No se reconoce `claude` o `agy` | Abre una terminal nueva o reinicia sesión en Windows; en Mac, agrega `~/.local/bin` a tu `PATH` |
 | `write: true` necesita Git | Trabaja en un repositorio con al menos un commit |
-| No aparecen los agentes de Gemini | Corre `verificar.cmd` y luego `agy agents` |
+| No aparecen los agentes de Gemini | Corre `verificar.cmd` (en Mac, `verificar.sh`) y luego `agy agents` |
 | Aparece un momento una ventana de consola | Es normal al lanzar procesos de Windows; se cierra sola |
 | Gemini termina sin informe | Quita pasos que requieran comandos y lánzalo otra vez |
 | El panel no aparece | Escribe `/cuadrilla` |
