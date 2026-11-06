@@ -26,6 +26,6 @@ export type GeminiState = { quotas: GeminiQuota[]; sessionTokens: number; seenAt
 
 declare module 'claude-code' {
   interface PluginState {
-    cuadrilla: { agents: Shaped<CuadrillaAgent[]>; limits: Shaped<CuadrillaLimit[]>; team: Shaped<Record<string, string>>; gemini: Shaped<GeminiState>; mainPick: Shaped<Record<string, string>> }
+    cuadrilla: { agents: Shaped<CuadrillaAgent[]>; limits: Shaped<CuadrillaLimit[]>; team: Shaped<Record<string, string>>; gemini: Shaped<GeminiState>; mainPick: Shaped<Record<string, string>>; workArea: Shaped<string> }
   }
 }

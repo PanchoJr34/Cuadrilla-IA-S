@@ -41,6 +41,7 @@ const agents = atom({ plugin: 'cuadrilla', key: 'agents' } as const, [], { shape
 const limits = atom({ plugin: 'cuadrilla', key: 'limits' } as const, [], { shape: 'limits-1' })
 const team = atom({ plugin: 'cuadrilla', key: 'team' } as const, {}, { shape: 'team-1' })
 const mainPick = atom({ plugin: 'cuadrilla', key: 'mainPick' } as const, {}, { shape: 'main-1' })
+const workArea = atom({ plugin: 'cuadrilla', key: 'workArea' } as const, 'Desarrollo', { shape: 'area-1' })
 const gemini = atom({ plugin: 'cuadrilla', key: 'gemini' } as const, { quotas: [], sessionTokens: 0 }, { shape: 'gemini-1' })
 
 type DelegateInput = {
@@ -507,25 +508,51 @@ const quotaName = (id: string) => {
 }
 
 const QUICK: { area: string; items: { label: string; text: string }[] }[] = [
-  { area: 'Proyecto', items: [
-    { label: 'Auditar', text: 'Usa la cuadrilla para auditar este proyecto en solo lectura. Reparte entre Gemini y Claude y dame un plan priorizado.' },
-    { label: 'Entender', text: 'Usa la skill entender-codigo y a gemini-investigador para explicarme este proyecto en solo lectura.' },
-    { label: 'Planear', text: 'Usa arquitecto-web y la skill planning-and-task-breakdown. Pregúntame el objetivo y prepara un plan antes de cambiar nada.' },
+  { area: "Desarrollo", items: [
+    { label: "Auditar", text: "Usa la cuadrilla para auditar este proyecto en solo lectura. Reparte entre Gemini y Claude y dame un plan priorizado." },
+    { label: "Entender", text: "Usa la skill entender-codigo y a gemini-investigador para explicarme este proyecto en solo lectura." },
+    { label: "Planear", text: "Usa arquitecto-web y la skill planning-and-task-breakdown. Pregúntame el objetivo y prepara un plan antes de cambiar nada." },
+    { label: "Corregir error", text: "Usa la skill debugging-and-error-recovery. Pregúntame qué falla, encuentra la causa y propón la corrección antes de aplicarla." },
+    { label: "Rendimiento", text: "Usa la skill performance-optimization para revisar este proyecto en solo lectura y dame mejoras por impacto." },
+    { label: "Pruebas", text: "Usa qa-web para revisar qué se debe probar y corre las pruebas disponibles. No cambies código sin mi aprobación." },
+    { label: "Documentar", text: "Lanza a gemini-documentador con escritura aislada para mejorar la documentación del proyecto. Muéstrame el diff y no integres nada." }
   ] },
-  { area: 'Web', items: [
-    { label: 'Landing', text: 'Usa la cuadrilla y la skill landing-completa. Pregúntame lo imprescindible y dime quién hará cada parte.' },
-    { label: 'Rendimiento', text: 'Usa la skill performance-optimization para revisar este proyecto en solo lectura y dame mejoras por impacto.' },
-    { label: 'Pruebas', text: 'Usa qa-web para revisar qué se debe probar y corre las pruebas disponibles. No cambies código sin mi aprobación.' },
+  { area: "Diseño", items: [
+    { label: "Revisar UI", text: "Lanza a gemini-disenador-ui en solo lectura para revisar la interfaz y dame los cambios visuales con mayor impacto." },
+    { label: "Rediseñar", text: "Usa disenador-ui y frontend-design. Pregúntame qué pantalla quieres rediseñar y propón una dirección antes de editar." },
+    { label: "Animaciones", text: "Usa las skills find-animation-opportunities y review-animations para revisar el movimiento de la interfaz en solo lectura." },
+    { label: "Accesibilidad", text: "Revisa accesibilidad en solo lectura: contraste, teclado, formularios y lectores de pantalla. Dame hallazgos priorizados." },
+    { label: "Móvil", text: "Usa la skill mobile-native para revisar cómo se siente este proyecto en teléfonos y dame mejoras concretas." }
   ] },
-  { area: 'Crecimiento', items: [
-    { label: 'SEO', text: 'Lanza a gemini-seo-marketing con la skill seo-audit para auditar este proyecto en solo lectura. Después verifica los hallazgos importantes.' },
-    { label: 'Conversión', text: 'Lanza a gemini-seo-marketing con la skill cro para revisar la conversión en solo lectura y dame acciones priorizadas.' },
-    { label: 'Marketing', text: 'Usa seo-marketing y gemini-investigador para preparar un plan de marketing. Pregúntame producto, audiencia y meta antes de empezar.' },
+  { area: "Marketing", items: [
+    { label: "SEO", text: "Lanza a gemini-seo-marketing con la skill seo-audit para auditar este proyecto en solo lectura. Después verifica los hallazgos importantes." },
+    { label: "SEO para IA", text: "Lanza a gemini-seo-marketing con la skill ai-seo para revisar cómo mejorar la presencia en buscadores con IA." },
+    { label: "Conversión", text: "Lanza a gemini-seo-marketing con la skill cro para revisar la conversión en solo lectura y dame acciones priorizadas." },
+    { label: "Plan", text: "Usa seo-marketing y gemini-investigador para preparar un plan de marketing. Pregúntame producto, audiencia y meta antes de empezar." },
+    { label: "Competencia", text: "Lanza a gemini-investigador con la skill competitor-profiling. Pregúntame quiénes son los competidores y separa hechos de suposiciones." },
+    { label: "Lanzamiento", text: "Usa la skill launch para planear un lanzamiento. Pregúntame producto, fecha y audiencia." },
+    { label: "Anuncios", text: "Usa las skills ads y ad-creative. Pregúntame producto, plataforma y presupuesto antes de proponer campañas." }
   ] },
-  { area: 'Calidad', items: [
-    { label: 'Seguridad', text: 'Usa revisor-seguridad y gemini-revisor para auditar la seguridad en solo lectura. Dame hallazgos con archivo, impacto y corrección.' },
-    { label: 'Diseño', text: 'Lanza a gemini-disenador-ui en solo lectura para revisar la interfaz y dame los cambios visuales con mayor impacto.' },
-    { label: 'Setup', text: 'Usa la skill auditar-setup para revisar mi configuración de Claude Code sin cambiar nada.' },
+  { area: "Contenido", items: [
+    { label: "Landing", text: "Usa la cuadrilla y la skill landing-completa. Pregúntame lo imprescindible y dime quién hará cada parte." },
+    { label: "Textos web", text: "Lanza a gemini-copywriter con la skill copywriting. Pregúntame audiencia y objetivo. No inventes datos." },
+    { label: "Blog", text: "Usa las skills content-strategy y copywriting. Pregúntame el tema y la audiencia, y entrega un esquema antes de redactar." },
+    { label: "Redes", text: "Usa la skill social para crear contenido de redes. Pregúntame plataforma, objetivo y tono." },
+    { label: "Correos", text: "Usa la skill emails para crear una secuencia. Pregúntame audiencia, objetivo y oferta." },
+    { label: "Humanizar", text: "Usa la skill humanizer. Pídeme el texto y hazlo sonar natural sin cambiar su significado." }
+  ] },
+  { area: "Negocio", items: [
+    { label: "Oferta", text: "Usa las skills offers y marketing-psychology. Pregúntame qué vendes y ayúdame a mejorar la oferta." },
+    { label: "Precios", text: "Usa la skill pricing. Pregúntame producto, costos y competencia, y separa datos de suposiciones." },
+    { label: "Prospectar", text: "Usa las skills prospecting y cold-email. Pregúntame cliente ideal y mercado, y respeta las reglas de cada canal." },
+    { label: "Ventas", text: "Usa la skill sales-enablement para crear material de ventas. Pregúntame producto y objeciones comunes." },
+    { label: "Retención", text: "Usa las skills churn-prevention y onboarding. Pregúntame cómo usan hoy el producto." }
+  ] },
+  { area: "Seguridad", items: [
+    { label: "Auditar", text: "Usa revisor-seguridad y gemini-revisor para auditar la seguridad en solo lectura. Dame hallazgos con archivo, impacto y corrección." },
+    { label: "Dependencias", text: "Revisa dependencias y secretos en solo lectura. No muestres valores secretos y dame riesgos con prioridad." },
+    { label: "Salida a producción", text: "Usa la skill shipping-and-launch para revisar qué falta antes de publicar. No despliegues nada." },
+    { label: "Setup", text: "Usa la skill auditar-setup para revisar mi configuración de Claude Code sin cambiar nada." }
   ] },
 ]
 
@@ -579,6 +606,11 @@ export const register: Register = on => {
 
   // Con terminales angostas el panel espera al primer mensaje. Si la persona lo cierra, no se vuelve a abrir solo.
   on('prompt.submit', async ($, e, next) => {
+    // Se usa el texto escrito: Claude Code puede añadir instrucciones internas al turno.
+    if (!e.command && e.text.trim() !== '' && !e.text.startsWith('cuadrilla:')) {
+      const auto = (await $.store.get('autoModel').catch(() => undefined)) !== false
+      await update($, mainPick, () => (auto ? chooseMain(e.text) : {}))
+    }
     if ((await $.store.get('paneClosed').catch(() => undefined)) !== true) {
       const pane = (await $.ui.panes().catch(() => [])).find(p => p.id === PANE)
       if (pane === undefined || !pane.isPlaced) void $.ui.open({ id: PANE, title: 'Cuadrilla' }).catch(() => {})
@@ -588,14 +620,6 @@ export const register: Register = on => {
 
   on('ui.close', async ($, e, next) => {
     if (e.id === PANE && e.origin.kind === 'person') await $.store.set('paneClosed', true).catch(() => {})
-    return next(e)
-  })
-
-  on('turn.start', async ($, e, next) => {
-    if (e.agentId === undefined && e.text.trim() !== '' && !e.text.startsWith('cuadrilla:')) {
-      const auto = (await $.store.get('autoModel').catch(() => undefined)) !== false
-      await update($, mainPick, () => (auto ? chooseMain(e.text) : {}))
-    }
     return next(e)
   })
 
@@ -675,6 +699,7 @@ export const register: Register = on => {
     const busy = Object.values(await read($, team))
     const google = await read($, gemini)
     const pick = (await read($, mainPick)) as Partial<MainPick>
+    const area = await read($, workArea)
     const auto = (await $.store.get('autoModel').catch(() => undefined)) !== false
     const now = await $.clock.now()
     const working = list.filter(a => a.state === 'running')
@@ -750,15 +775,20 @@ export const register: Register = on => {
           )),
         )}
         {section(
-          'Atajos',
-          QUICK.map(group => (
-            <Box flexDirection="column" marginBottom={1}>
-              <Text dimColor>{group.area}</Text>
-              <Box flexDirection="row" flexWrap="wrap" gap={1}>
-                {group.items.map(q => <Button key={`${group.area}-${q.label}`} label={q.label} onPress={() => void $.prompt.submit({ text: q.text }).catch(() => {})} />)}
-              </Box>
-            </Box>
-          )),
+          'Trabajar en',
+          <Box flexDirection="row" flexWrap="wrap" gap={1}>
+            {QUICK.map(group => (
+              <Button
+                key={`area-${group.area}`}
+                label={group.area === area ? `● ${group.area}` : group.area}
+                onPress={() => void update($, workArea, () => group.area).catch(() => {})}
+              />
+            ))}
+          </Box>,
+          <Text> </Text>,
+          <Box flexDirection="row" flexWrap="wrap" gap={1}>
+            {(QUICK.find(group => group.area === area)?.items ?? []).map(q => <Button key={`${area}-${q.label}`} label={q.label} onPress={() => void $.prompt.submit({ text: q.text }).catch(() => {})} />)}
+          </Box>,
         )}
       </Box>
     )

@@ -1,5 +1,10 @@
 # Cambios
 
+## 0.7.0
+
+- Selector de áreas con 34 acciones.
+- El modelo automático usa solo lo que escribe la persona.
+
 ## 0.6.1
 
 - Conserva la última cuota de Gemini y muestra sus límites con nombres claros.

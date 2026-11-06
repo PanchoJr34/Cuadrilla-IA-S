@@ -306,7 +306,7 @@ test('cada turno elige modelo en español e inglés', async ($, on) => {
   on('turn.start', (_: unknown, e: any) => ({ turnId: e.turnId }) as never)
   await setup($, on)
   const turn = async (text: string) => {
-    await $.turn.start({ text, turnId: text } as never).catch(() => undefined)
+    await $.prompt.submit({ text } as never).catch(() => undefined)
     try {
       for await (const _ of $.turn.step({ turnId: text, index: 0, model: 'claude-opus-5-5', effort: 'medium' } as never)) void _
     } catch {}
@@ -326,4 +326,15 @@ test('conserva la última cuota si agy aún no la envía', async ($, on) => {
   expect(shown).toContain('Gemini · 5 horas')
   expect(shown).toContain('12%')
   await ui.unmount(); s.release(); await settle()
+})
+
+test('el modelo ignora lo que Claude Code agrega al turno', async ($, on) => {
+  const seen: string[] = []
+  on('turn.step', async function* (_: unknown, e: any) { seen.push(e.model); return { turnId: e.turnId, index: e.index, answer: '', toolUses: [] } as never })
+  await setup($, on)
+  await $.prompt.submit({ text: 'hi' } as never).catch(() => undefined)
+  try {
+    for await (const _ of $.turn.step({ turnId: 'x', index: 0, model: 'claude-opus-5-5', effort: 'medium' } as never)) void _
+  } catch {}
+  expect(seen).toEqual(['haiku'])
 })
