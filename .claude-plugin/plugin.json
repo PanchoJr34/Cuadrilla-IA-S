@@ -1,6 +1,6 @@
 {
   "name": "cuadrilla",
-  "version": "0.5.2",
+  "version": "0.5.3",
   "description": "Agentes y skills de desarrollo web, diseño y marketing para Claude Code en Windows, con delegación a Gemini en segundo plano",
   "author": {
     "name": "PanchoJr34",

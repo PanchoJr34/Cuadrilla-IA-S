@@ -1,5 +1,10 @@
 # Cambios
 
+## 0.5.3
+
+- Flash pasa a ser el modelo general de Gemini; Argon queda para lo difícil.
+- Corrección de la lectura de cuota de Gemini en Windows.
+
 ## 0.5.2
 
 - 12 atajos por área y diagnóstico de la cuota de Gemini en el panel.

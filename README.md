@@ -140,10 +140,10 @@ Cuadrilla ajusta la potencia según la tarea. Entiende encargos en español e in
 | Potencia | Cuándo se usa | Gemini | Claude |
 | --- | --- | --- | --- |
 | Rápido | Resúmenes, listas, variantes y formato | Flash | Haiku |
-| Equilibrado | Trabajo general | Argon, nivel medio | Sonnet |
+| Equilibrado | Trabajo general | Flash, nivel alto | Sonnet |
 | Profundo | Auditorías, seguridad, arquitectura y depuración | Argon, nivel alto | Opus |
 
-Puedes forzarlo: "usa potencia profunda" o "usa el modelo X". Cuadrilla elige el modelo de Gemini por reglas; en Claude, la instrucción la aplica Claude al lanzar cada agente. El modelo de tu conversación principal se cambia con `/model`.
+Puedes forzarlo: "usa potencia profunda" o "usa el modelo X". Cuadrilla elige el modelo de Gemini por reglas; en Claude, la instrucción la aplica Claude al lanzar cada agente. Esto aplica a lo que lanza Cuadrilla. Al abrir `agy` por tu cuenta, el modelo lo eliges tú con `/model`; lo mismo pasa en tu conversación principal de Claude.
 
 ## Dónde funciona
 

@@ -130,7 +130,8 @@ const pickModel = (models: string[], tier: Tier) => {
   const level = (list: string[], word: string) => list.find(id => id.toLowerCase().endsWith(word)) ?? list[0]
   if (tier === 'rapido') return level(flash, 'medium') ?? level(strong, 'low')
   if (tier === 'profundo') return level(strong, 'high') ?? level(flash, 'high')
-  return level(strong, 'medium') ?? level(flash, 'high')
+  // Argon queda para lo difícil: gasta más cuota y Flash resuelve el trabajo general.
+  return level(flash, 'high') ?? level(strong, 'medium')
 }
 
 const argvFor = (input: DelegateInput, prompt: string) => [

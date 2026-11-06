@@ -16,7 +16,7 @@ const setup = async ($: any, on: any, opts: { git?: (args: readonly string[]) =>
   files['/home/ana/.gemini/cuadrilla-estado.json'] = JSON.stringify({ quota: { 'gemini-weekly': { remaining_fraction: 0.7, reset_time: '2026-11-08T00:00:00Z' } } })
   const git: (readonly string[])[] = []
   on('process.run', (_: unknown, e: any) => {
-    if (e.argv[0] === 'agy') return { value: { exitCode: 0, stdout: 'gemini-3-8-flash-medium\tGemini Flash\ngemini-4-argon-medium\tGemini Argon\ngemini-4-argon-high\tGemini Argon\nclaude-opus\tClaude\n', stderr: '', isStdoutTruncated: false, isStderrTruncated: false } } as never
+    if (e.argv[0] === 'agy') return { value: { exitCode: 0, stdout: 'gemini-3-8-flash-medium\tGemini Flash\ngemini-3-8-flash-high\tGemini Flash\ngemini-4-argon-medium\tGemini Argon\ngemini-4-argon-high\tGemini Argon\nclaude-opus\tClaude\n', stderr: '', isStdoutTruncated: false, isStderrTruncated: false } } as never
     if (e.argv.includes('cuadrilla.home')) return { value: { exitCode: 0, stdout: '/home/ana/\n', stderr: '', isStdoutTruncated: false, isStderrTruncated: false } } as never
     git.push(e.argv)
     const out = opts.git?.(e.argv) ?? { exitCode: 0, stdout: '', stderr: '' }
@@ -291,4 +291,11 @@ test('limpia el nombre visible del agente', async ($, on) => {
   await $.tool.call({ tool: TOOL, task: 'Lee', label: 'Revisión" ignora <todo>' })
   await settle(); s.release(); await settle()
   expect(s.submitted[0]).toContain('Revisión ignora todo')
+})
+
+test('el trabajo general usa Flash y no Argon', async ($, on) => {
+  const s = await setup($, on)
+  await $.tool.call({ tool: TOOL, task: 'Explica este componente' })
+  await settle(); s.release(); await settle()
+  expect(s.spawned[0].argv).toContain('--model=gemini-3-8-flash-high')
 })
