@@ -302,7 +302,7 @@ test('el trabajo general usa Flash y no Argon', async ($, on) => {
 
 test('cada turno elige modelo en español e inglés', async ($, on) => {
   const seen: string[] = []
-  on('turn.step', async function* (_: unknown, e: any) { seen.push(e.model); return {} as never })
+  on('turn.step', async function* (_: unknown, e: any) { seen.push(e.model); return { turnId: e.turnId, index: e.index, answer: '', toolUses: [] } as never })
   on('turn.start', (_: unknown, e: any) => ({ turnId: e.turnId }) as never)
   await setup($, on)
   const turn = async (text: string) => {
