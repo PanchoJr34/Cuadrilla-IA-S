@@ -1,6 +1,6 @@
 ---
 name: landing-completa
-description: Crea una landing page de principio a fin: mensaje, diseño, implementación, SEO y pruebas.
+description: "Crea una landing page de principio a fin: mensaje, diseño, implementación, SEO y pruebas."
 ---
 
 # Landing completa

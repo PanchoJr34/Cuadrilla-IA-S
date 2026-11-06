@@ -1,6 +1,6 @@
 ---
 name: qa-web
-description: Prueba sitios y aplicaciones web: funcionalidad, responsive, accesibilidad y rendimiento.
+description: "Prueba sitios y aplicaciones web: funcionalidad, responsive, accesibilidad y rendimiento."
 model: sonnet
 tools: Read, Grep, Glob, Bash, Skill
 ---
