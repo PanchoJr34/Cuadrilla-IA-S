@@ -1,6 +1,6 @@
 <div align="center">
 
-<img src="assets/hero.svg" alt="Cuadrilla IA: Claude and Gemini working as one team" width="100%">
+<img src="assets/hero.en.svg" alt="Cuadrilla IA: Claude and Gemini working as one team" width="100%">
 
 <a href="LICENSE"><img alt="MIT License" src="https://img.shields.io/badge/license-MIT-2DD4BF?style=for-the-badge&labelColor=10151A"></a>
 <img alt="Windows 10 and 11" src="https://img.shields.io/badge/Windows-10%20%7C%2011-60A5FA?style=for-the-badge&labelColor=10151A">
@@ -22,6 +22,33 @@
 ## Technical overview
 
 Cuadrilla is a Claude Code plugin for multi-agent orchestration on Windows. It registers an MCP delegation tool, a status panel and routing hooks. It launches Antigravity CLI agents without a shell, isolates writes with `git worktree`, selects models per turn and treats output from other models as untrusted data.
+
+## What it is
+
+Cuadrilla turns Claude Code into an AI team for web work. Instead of asking one assistant to do everything, you describe the outcome and the work gets split: Claude plans, Gemini researches or creates, another agent reviews, and you approve.
+
+| Without Cuadrilla | With Cuadrilla |
+| :-- | :-- |
+| One chat does everything | A specialist takes each part |
+| The same model for every task | The model changes with the work |
+| Heavy reading burns your limits | Gemini can take that part |
+| Authors review their own work | Claude and Gemini review each other |
+| Changes land directly in the project | Gemini edits in an isolated copy |
+
+<p align="center"><img src="assets/audience.en.svg" alt="Cuadrilla is for developers, IT teams, designers, marketers, founders and freelancers" width="96%"></p>
+
+### When it fits
+
+- You work on Windows with Claude Code.
+- You build sites, landing pages, digital products, SEO or campaigns.
+- You want to get more out of your Claude and Google plans.
+- You prefer to approve every important change.
+
+### When it does not
+
+- You only need a chat for quick questions.
+- You work on macOS or Linux: Cuadrilla is built for Windows.
+- You cannot send your code or data to Anthropic or Google.
 
 ## How it works
 
@@ -71,7 +98,7 @@ Keep that folder. Restart Claude Code, open a project and type `/cuadrilla`.
 
 Track usage, model choice, agents and jobs from Claude Code.
 
-<p align="center"><img src="assets/panel.svg" alt="Illustration of the Cuadrilla panel" width="92%"></p>
+<p align="center"><img src="assets/panel.en.svg" alt="Illustration of the Cuadrilla panel" width="92%"></p>
 
 ## What you get
 

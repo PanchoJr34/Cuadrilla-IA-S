@@ -23,11 +23,32 @@
 
 Cuadrilla es un plugin de Claude Code para orquestación multiagente en Windows. Registra una herramienta MCP de delegación, un panel de estado y hooks de enrutamiento. Lanza agentes de Antigravity CLI sin shell, aísla la escritura con `git worktree`, selecciona modelos por turno y trata la salida de otros modelos como datos no confiables.
 
-## Qué es
+## De qué trata
 
-Cuadrilla convierte a Claude Code en un equipo de trabajo. Le pides un resultado, y Claude organiza quién hace cada parte: unas tareas las resuelven agentes de Claude y otras los agentes de Gemini, con tu plan de Google.
+Cuadrilla convierte a Claude Code en un equipo de IA para trabajo web. En lugar de pedirle todo a un solo asistente, le dices el resultado que buscas y el trabajo se reparte: Claude organiza, Gemini investiga o produce, otro agente revisa y tú apruebas.
 
-Sirve para cuando el trabajo ya no cabe en una sola conversación: auditar un sitio, crear una landing, preparar un lanzamiento o entender un proyecto ajeno. Tú sigues decidiendo. Lo que Gemini cambia queda en una copia aparte hasta que lo revises y lo apruebes.
+| Sin Cuadrilla | Con Cuadrilla |
+| :-- | :-- |
+| Un solo chat hace todo | Cada parte la toma un especialista |
+| El mismo modelo para cualquier tarea | El modelo cambia según el trabajo |
+| Gastas tus límites en lectura pesada | Gemini puede tomar esa parte |
+| Quien hace el trabajo se revisa solo | Claude y Gemini se revisan entre sí |
+| Los cambios llegan directo al proyecto | Gemini edita en una copia aislada |
+
+<p align="center"><img src="assets/audience.svg" alt="Cuadrilla es para desarrolladores, equipos de sistemas, diseñadores, marketing, fundadores y freelancers" width="96%"></p>
+
+### Cuándo te conviene
+
+- Trabajas en Windows con Claude Code.
+- Haces sitios, landings, productos digitales, SEO o campañas.
+- Quieres aprovechar tus planes de Claude y Google.
+- Prefieres aprobar cada cambio importante.
+
+### Cuándo no
+
+- Si solo necesitas un chat para preguntas rápidas.
+- Si trabajas en macOS o Linux: Cuadrilla está hecha para Windows.
+- Si no puedes enviar tu código o datos a Anthropic o Google.
 
 ## Cómo funciona
 
