@@ -1,5 +1,11 @@
 # Cambios
 
+## 0.5.0
+
+- Interfaz propia con capacidad de Claude y Gemini.
+- Elección automática de modelo según la tarea, en español e inglés.
+- 54 skills más, para llegar a 101.
+
 ## 0.4.1
 
 - La escritura exige un rol autorizado.

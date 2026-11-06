@@ -57,6 +57,7 @@ xcopy "%~dp0references" "%~dp0gemini\references\" /E /I /Q /Y >nul
 call agy plugin uninstall cuadrilla >nul 2>nul
 call agy plugin install "%~dp0gemini"
 if errorlevel 1 echo [AVISO] No se pudo instalar Cuadrilla en Antigravity.
+powershell -NoProfile -ExecutionPolicy Bypass -File "%~dp0gemini\activar-cuota.ps1"
 
 :resumen
 echo.

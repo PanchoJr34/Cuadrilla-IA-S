@@ -13,8 +13,11 @@ const setup = async ($: any, on: any, opts: { git?: (args: readonly string[]) =>
   on('fs.exists', (_: unknown, e: any) => ({ value: e.path in files }) as never)
   on('fs.list', (_: unknown, e: any) => ({ value: e.path?.endsWith('src') ? [{ name: 'b.ts', kind: 'file', size: 1, mtimeMs: 0, isLink: false }] : [{ name: 'a.ts', kind: 'file', size: 1, mtimeMs: 0, isLink: false }, { name: 'src', kind: 'dir', size: 0, mtimeMs: 0, isLink: false }, { name: 'node_modules', kind: 'dir', size: 0, mtimeMs: 0, isLink: false }] }) as never)
   on('fs.read', (_: unknown, e: any) => ({ value: files[e.path] }) as never)
+  files['/home/ana/.gemini/cuadrilla-estado.json'] = JSON.stringify({ quota: { 'gemini-weekly': { remaining_fraction: 0.7, reset_time: '2026-11-08T00:00:00Z' } } })
   const git: (readonly string[])[] = []
   on('process.run', (_: unknown, e: any) => {
+    if (e.argv[0] === 'agy') return { value: { exitCode: 0, stdout: 'gemini-3-8-flash-medium\tGemini Flash\ngemini-4-argon-medium\tGemini Argon\ngemini-4-argon-high\tGemini Argon\nclaude-opus\tClaude\n', stderr: '', isStdoutTruncated: false, isStderrTruncated: false } } as never
+    if (e.argv.includes('cuadrilla.home')) return { value: { exitCode: 0, stdout: '/home/ana/\n', stderr: '', isStdoutTruncated: false, isStderrTruncated: false } } as never
     git.push(e.argv)
     const out = opts.git?.(e.argv) ?? { exitCode: 0, stdout: '', stderr: '' }
     return { value: { ...out, isStdoutTruncated: false, isStderrTruncated: false } } as never
@@ -33,6 +36,7 @@ const setup = async ($: any, on: any, opts: { git?: (args: readonly string[]) =>
   on('prompt.submit', (_: unknown, e: any) => { submitted.push(e.text); return { text: e.text } as never })
   for (const name of ['tool.register', 'command.register']) on(name, () => ({ value: undefined }) as never)
   on('ui.open', () => ({ value: { isPlaced: true } }) as never)
+  on('ui.status', () => ({ value: undefined }) as never)
   on('store.get', () => ({ value: undefined }) as never)
   on('store.set', () => ({ value: undefined }) as never)
   on('session.usage', () => ({ value: { rateLimits: [{ kind: 'five_hour', percentUsed: 48 }], context: { window: 200_000 } } }) as never)
@@ -125,8 +129,10 @@ test('no pasa de tres agentes a la vez y el panel los muestra', async ($, on) =>
   expect(String((await $.tool.call({ tool: TOOL, task: 'Lee' })).result)).toContain('ya hay 3')
   for (const surface of ['terminal', 'desktop'] as const) {
     const ui = await $.ui.mount({ plugin: 'cuadrilla', component: 'Pane', requestId: 'cuadrilla', surface, props: { title: 'Cuadrilla', isFocused: false, bodyColumns: 60, placement: 'dock', scroll: { offset: 0, bodyRows: 30 }, view: {} } } as never)
-    expect(await ui.find({ type: 'Text', text: /3 de 3/ })).toBeDefined()
-    expect(await ui.find({ type: 'Text', text: /48%/ })).toBeDefined()
+    expect(await ui.find({ type: 'Text', text: /3\/3/ })).toBeDefined()
+    const shown = JSON.stringify(await ui.find({ type: 'Box' }))
+    expect(shown).toContain('48%')
+    expect(shown).toContain('30%')
     await ui.unmount()
   }
   s.release(); await settle()
@@ -190,9 +196,9 @@ test('el panel marca a Gemini y a los agentes de Claude activos', async ($, on) 
   const s = await setup($, on)
   await $.tool.call({ tool: TOOL, task: 'Lee', label: 'revision' })
   const ui = await $.ui.mount({ plugin: 'cuadrilla', component: 'Pane', requestId: 'cuadrilla', surface: 'desktop', props: { title: 'Cuadrilla', isFocused: false, bodyColumns: 60, placement: 'dock', scroll: { offset: 0, bodyRows: 30 }, view: {} } } as never)
-  expect(await ui.find({ type: 'Text', text: /Límites de Claude/ })).toBeDefined()
-  expect(await ui.find({ type: 'Text', text: /General · activo/ })).toBeDefined()
-  expect(await ui.find({ type: 'Text', text: /frontend/ })).toBeDefined()
+  expect(await ui.find({ type: 'Text', text: /CAPACIDAD/ })).toBeDefined()
+  expect(await ui.find({ type: 'Text', text: /AGENTES ACTIVOS/ })).toBeDefined()
+  expect(await ui.find({ type: 'Text', text: /revision/ })).toBeDefined()
   await ui.unmount()
   s.release(); await settle()
 })
@@ -248,4 +254,26 @@ test('avisa si un agente cambia archivos fuera de su copia', async ($, on) => {
   const id = idOf((await $.tool.call({ tool: TOOL, task: 'Edita', write: true, role: 'gemini-frontend' })).result)
   await settle(); s.release(); await settle()
   expect(String((await $.tool.call({ tool: TOOL, action: 'result', id })).result)).toContain('fuera de su copia aislada')
+})
+
+test('elige modelo según tarea y respeta el indicado', async ($, on) => {
+  const s = await setup($, on)
+  await $.tool.call({ tool: TOOL, task: 'Audita', role: 'gemini-auditor-web' })
+  await $.tool.call({ tool: TOOL, task: 'Haz variantes de este titular' })
+  await $.tool.call({ tool: TOOL, task: 'Explica', model: 'gemini-mio' })
+  await settle(); s.release(); await settle()
+  const all = s.spawned.map(x => x.argv.join(' '))
+  expect(all.some(x => x.includes('--model=gemini-4-argon-high'))).toBe(true)
+  expect(all.some(x => x.includes('--model=gemini-3-8-flash-medium'))).toBe(true)
+  expect(all.some(x => x.includes('--model=gemini-mio'))).toBe(true)
+})
+
+test('entiende tareas en inglés al elegir modelo', async ($, on) => {
+  const s = await setup($, on)
+  await $.tool.call({ tool: TOOL, task: 'Audit the authentication flow' })
+  await $.tool.call({ tool: TOOL, task: 'Summarize this page' })
+  await settle(); s.release(); await settle()
+  const all = s.spawned.map(x => x.argv.join(' '))
+  expect(all.some(x => x.includes('--model=gemini-4-argon-high'))).toBe(true)
+  expect(all.some(x => x.includes('--model=gemini-3-8-flash-medium'))).toBe(true)
 })

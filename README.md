@@ -4,7 +4,7 @@
 
 **Tu equipo de agentes de Claude y Gemini para crear, mejorar y lanzar productos web.**
 
-Plugin para Claude Code en Windows · 15 agentes · 47 skills · Sin WSL
+Plugin para Claude Code en Windows · 15 agentes · 101 skills · Español e inglés · Sin WSL
 
 [Empezar](#empezar-en-10-minutos) · [Cómo funciona](#cómo-funciona) · [Prompts](docs/prompts.md) · [Privacidad](PRIVACIDAD.md)
 
@@ -124,6 +124,27 @@ Audita este proyecto en solo lectura. gemini-auditor-web revisa la estructura, g
 
 Si algo falla, corre `cmd /c "$HOME\Cuadrilla-IA-S\verificar.cmd"`.
 
+## Lo que ves en el panel
+
+- **Capacidad:** cuánto llevas de Claude y Gemini, y cuándo se reinicia.
+- **Agentes activos:** quién está trabajando en este momento.
+- **Trabajos:** estado, modelo elegido y motivo de cada encargo.
+- **Atajos:** auditar, crear una landing, revisar SEO o revisar tu configuración.
+
+La cuota de Gemini proviene de Antigravity y se actualiza cuando usas `agy` en modo interactivo. Si el panel la pide, abre `agy` un momento. El dato puede tener un retraso.
+
+## Elección inteligente de modelo
+
+Cuadrilla ajusta la potencia según la tarea. Entiende encargos en español e inglés.
+
+| Potencia | Cuándo se usa | Gemini | Claude |
+| --- | --- | --- | --- |
+| Rápido | Resúmenes, listas, variantes y formato | Flash | Haiku |
+| Equilibrado | Trabajo general | Argon, nivel medio | Sonnet |
+| Profundo | Auditorías, seguridad, arquitectura y depuración | Argon, nivel alto | Opus |
+
+Puedes forzarlo: "usa potencia profunda" o "usa el modelo X". Cuadrilla elige el modelo de Gemini por reglas; en Claude, la instrucción la aplica Claude al lanzar cada agente. El modelo de tu conversación principal se cambia con `/model`.
+
 ## Dónde funciona
 
 | Lugar | Cuadrilla |
@@ -132,7 +153,7 @@ Si algo falla, corre `cmd /c "$HOME\Cuadrilla-IA-S\verificar.cmd"`.
 | Extensión de VS Code | Sí, en sesiones locales |
 | App de escritorio | Sí, en sesiones locales de Claude Code |
 | Sesiones en la nube | No |
-| Chat normal de Claude | No corre el plugin; usa una skill como guía |
+| Chat normal de Claude | Sin agentes ni panel; usa la skill `cuadrilla-web` como método |
 
 ## El equipo
 
@@ -208,7 +229,7 @@ Pueden sumar gasto de contexto y algunos usan hooks o conectores. Desactiva los 
 
 ### Skills
 
-Disponibles para Claude y Gemini. Las de terceros son copias fijas en Markdown, sin scripts. `pick-ui-library`, `prototype` y `review-animations` solo corren si las pides por nombre.
+Son 101, disponibles para Claude y Gemini. Las listadas abajo son las principales; el resto cubre anuncios, ventas, retención, pruebas, móvil y flujo de desarrollo. Las de terceros son copias fijas en Markdown, sin scripts. `pick-ui-library`, `prototype` y `review-animations` solo corren si las pides por nombre.
 
 <details>
 <summary><strong>Flujos de Cuadrilla</strong></summary>
@@ -356,7 +377,9 @@ Los plugins oficiales se quitan aparte con `claude plugin uninstall <plugin>@<ma
 | Equipo mixto con Gemini y Claude | Probado en Windows |
 | Panel y agentes `gemini-*` en terminal | Probado en Windows |
 | Plugins oficiales | Instalación probada en Linux |
-| VS Code y app de escritorio | Falta probar en Windows |
+| VS Code | Probado en Windows |
+| App de escritorio | Falta probar en Windows |
+| Cuota de Gemini y elección de modelo | Falta probar en Windows |
 
 ## Problemas comunes
 
@@ -366,6 +389,7 @@ Los plugins oficiales se quitan aparte con `claude plugin uninstall <plugin>@<ma
 | Falla el clon del repo | Corre `git ls-remote` y autoriza GitHub |
 | `write: true` necesita Git | Trabaja en un repositorio con al menos un commit |
 | No aparecen los agentes de Gemini | Corre `verificar.cmd` y luego `agy agents` |
+| Se abre una ventana de consola al lanzar Gemini | Se está investigando; no afecta el resultado |
 | Gemini termina sin informe | Quita pasos que requieran comandos y lánzalo otra vez |
 | El panel no aparece | Escribe `/cuadrilla` |
 

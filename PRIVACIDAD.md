@@ -8,7 +8,7 @@ Cuadrilla no tiene servidor propio, no pide contraseñas y no envía telemetría
 
 | Dónde | Qué se guarda o envía |
 | --- | --- |
-| Tu equipo | Informes en `.cuadrilla/reports/`, copias aisladas en `.cuadrilla/worktrees/` y estado del panel |
+| Tu equipo | Informes en `.cuadrilla/reports/`, copias aisladas en `.cuadrilla/worktrees/` y estado del panel, y un archivo local con el estado de Antigravity, que incluye tu correo y cuota |
 | Anthropic | Lo que usas en Claude Code, con tu cuenta y según sus condiciones |
 | Google | La tarea delegada, hasta 300 nombres de archivo y el contenido que Gemini lea, con tu cuenta y según sus condiciones |
 | Conectores | Solo lo que autorices en cada servicio externo |

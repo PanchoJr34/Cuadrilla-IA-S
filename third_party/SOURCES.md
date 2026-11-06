@@ -12,3 +12,9 @@ Copias fijas: solo Markdown, sin scripts. Para actualizar, revisa el cambio de o
 | https://github.com/blader/humanizer | `0ef9fe5bc357` | humanizer |
 
 Las listas de `references/` provienen de `addyosmani/agent-skills`.
+
+## Agregadas en 0.5.0
+
+- coreyhaines31/marketingskills: ab-testing, ad-creative, ads, aso, attribution, churn-prevention, co-marketing, cold-email, community-marketing, competitor-profiling, competitors, directory-submissions, events, free-tools, image, influencer-marketing, lead-magnets, link-building, marketing-council, marketing-ideas, marketing-loops, offers, onboarding, paywalls, popups, programmatic-seo, prospecting, public-relations, referrals, revops, sales-enablement, sms, video
+- addyosmani/agent-skills: ci-cd-and-automation, code-simplification, context-engineering, deprecation-and-migration, documentation-and-adrs, doubt-driven-development, git-workflow-and-versioning, incremental-implementation, interview-me, observability-and-instrumentation, source-driven-development, spec-driven-development, test-driven-development, using-agent-skills
+- emilkowalski/skills: animate-expo, apple-design, ask-sonner, choreograph, mobile-native, remove-animations, write-swift
