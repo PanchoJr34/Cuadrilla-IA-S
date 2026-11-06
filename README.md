@@ -129,7 +129,7 @@ Si algo falla, corre `cmd /c "$HOME\Cuadrilla-IA-S\verificar.cmd"`.
 - **Capacidad:** cuánto llevas de Claude y Gemini, y cuándo se reinicia.
 - **Agentes activos:** quién está trabajando en este momento.
 - **Trabajos:** estado, modelo elegido y motivo de cada encargo.
-- **Atajos:** auditar, crear una landing, revisar SEO o revisar tu configuración.
+- **Atajos:** 12 acciones de proyecto, web, crecimiento y calidad.
 
 La cuota de Gemini proviene de Antigravity y se actualiza cuando usas `agy` en modo interactivo. Si el panel la pide, abre `agy` un momento. El dato puede tener un retraso.
 

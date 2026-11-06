@@ -231,22 +231,29 @@ const geminiModels = async ($: EngineInterface): Promise<string[]> => {
 
 /** Cuota que Antigravity escribe mientras usas agy; se lee sin abrir procesos nuevos. */
 const refreshGeminiQuota = async ($: EngineInterface) => {
-  const home = (await git($, ['-c', 'cuadrilla.home=~/', 'config', '--type=path', '--get', 'cuadrilla.home'], '.')).stdout.trim()
-  if (!home) return
-  const path = join(home.replace(/\\/g, '/'), '.gemini/cuadrilla-estado.json')
+  const report = (note: string) => update($, gemini, state => (state.note === note ? state : { ...state, note }))
+  // Se pregunta una sola vez: en VS Code cada proceso puede mostrar una consola.
+  if (homeDir === undefined) {
+    const found = await git($, ['-c', 'cuadrilla.home=~/', 'config', '--type=path', '--get', 'cuadrilla.home'], '.')
+    homeDir = found.isOk ? found.stdout.trim().replace(/\\/g, '/') : ''
+  }
+  if (!homeDir) return report('No se pudo ubicar tu carpeta de usuario.')
+  const path = join(homeDir, '.gemini/cuadrilla-estado.json')
+  const exists = await $.fs.exists(path).catch(() => false)
+  if (!exists) return report('Abre agy una vez para leer tu cuota.')
   const raw = await $.fs.read(path).catch(() => undefined)
-  if (typeof raw !== 'string') return
-  let data: { quota?: Record<string, { remaining_fraction?: number; reset_in_seconds?: number; reset_time?: string; disabled?: boolean }> }
+  if (typeof raw !== 'string') return report('Claude Code no pudo leer el archivo de cuota.')
+  let data: { quota?: Record<string, { remaining_fraction?: number; reset_time?: string; disabled?: boolean }> }
   try {
     data = JSON.parse(raw.replace(/^\uFEFF/, ''))
   } catch {
-    return
+    return report('Abre agy un momento: la cuota aún no está completa.')
   }
   const quotas: GeminiQuota[] = Object.entries(data.quota ?? {}).flatMap(([id, q]) =>
     typeof q.remaining_fraction === 'number' && !q.disabled ? [{ id, percentUsed: Math.round((1 - q.remaining_fraction) * 100), ...(q.reset_time ? { resetsAt: q.reset_time } : {}) }] : [],
   )
   const seenAt = await $.clock.now()
-  await update($, gemini, state => ({ ...state, quotas, seenAt }))
+  await update($, gemini, state => ({ ...state, quotas, seenAt, note: quotas.length > 0 ? '' : 'agy no informó cuota en este plan.' }))
 }
 
 const projectFiles = async ($: EngineInterface, cwd: string) => {
@@ -279,6 +286,7 @@ const fingerprints = async ($: EngineInterface, cwd: string, files: string[] | u
   return new Map(lines.length === list.length ? list.map((f, i) => [f, lines[i] as string]) : [])
 }
 
+let homeDir: string | undefined
 const stopReasons = new Map<string, string>()
 let serial = 0
 let startQueue: Promise<unknown> = Promise.resolve()
@@ -472,11 +480,27 @@ const compact = (n: number) => (n >= 1_000_000 ? `${(n / 1_000_000).toFixed(1)} 
 
 const quotaName = (id: string) => id.replace(/[-_]/g, ' ').replace(/\bweekly\b/i, 'semana').replace(/\b(5h|five hour)\b/i, '5 horas').replace(/^./, c => c.toUpperCase())
 
-const QUICK = [
-  { key: 'q-audit', label: 'Auditar proyecto', text: 'Usa la cuadrilla para auditar este proyecto en solo lectura. Reparte el trabajo entre Gemini y Claude y dame un plan priorizado.' },
-  { key: 'q-landing', label: 'Crear landing', text: 'Usa la cuadrilla y la skill landing-completa para crear una landing. Antes de empezar, pregúntame lo imprescindible y dime quién hará cada parte.' },
-  { key: 'q-seo', label: 'Revisar SEO', text: 'Lanza a gemini-seo-marketing con la skill seo-audit para auditar este proyecto en solo lectura. Después verifica sus hallazgos importantes.' },
-  { key: 'q-setup', label: 'Revisar setup', text: 'Usa la skill auditar-setup para revisar mi configuración de Claude Code sin cambiar nada.' },
+const QUICK: { area: string; items: { label: string; text: string }[] }[] = [
+  { area: 'Proyecto', items: [
+    { label: 'Auditar', text: 'Usa la cuadrilla para auditar este proyecto en solo lectura. Reparte entre Gemini y Claude y dame un plan priorizado.' },
+    { label: 'Entender', text: 'Usa la skill entender-codigo y a gemini-investigador para explicarme este proyecto en solo lectura.' },
+    { label: 'Planear', text: 'Usa arquitecto-web y la skill planning-and-task-breakdown. Pregúntame el objetivo y prepara un plan antes de cambiar nada.' },
+  ] },
+  { area: 'Web', items: [
+    { label: 'Landing', text: 'Usa la cuadrilla y la skill landing-completa. Pregúntame lo imprescindible y dime quién hará cada parte.' },
+    { label: 'Rendimiento', text: 'Usa la skill performance-optimization para revisar este proyecto en solo lectura y dame mejoras por impacto.' },
+    { label: 'Pruebas', text: 'Usa qa-web para revisar qué se debe probar y corre las pruebas disponibles. No cambies código sin mi aprobación.' },
+  ] },
+  { area: 'Crecimiento', items: [
+    { label: 'SEO', text: 'Lanza a gemini-seo-marketing con la skill seo-audit para auditar este proyecto en solo lectura. Después verifica los hallazgos importantes.' },
+    { label: 'Conversión', text: 'Lanza a gemini-seo-marketing con la skill cro para revisar la conversión en solo lectura y dame acciones priorizadas.' },
+    { label: 'Marketing', text: 'Usa seo-marketing y gemini-investigador para preparar un plan de marketing. Pregúntame producto, audiencia y meta antes de empezar.' },
+  ] },
+  { area: 'Calidad', items: [
+    { label: 'Seguridad', text: 'Usa revisor-seguridad y gemini-revisor para auditar la seguridad en solo lectura. Dame hallazgos con archivo, impacto y corrección.' },
+    { label: 'Diseño', text: 'Lanza a gemini-disenador-ui en solo lectura para revisar la interfaz y dame los cambios visuales con mayor impacto.' },
+    { label: 'Setup', text: 'Usa la skill auditar-setup para revisar mi configuración de Claude Code sin cambiar nada.' },
+  ] },
 ]
 
 export const register: Register = on => {
@@ -632,7 +656,7 @@ export const register: Register = on => {
           <Text> </Text>,
           <Text bold color={BLUE}>Gemini</Text>,
           google.quotas.length === 0
-            ? <Text dimColor>Abre agy una vez para leer tu cuota.</Text>
+            ? <Text dimColor>{google.note || 'Buscando tu cuota…'}</Text>
             : google.quotas.map(q => bar(quotaName(q.id), q.percentUsed, resetIn(q.resetsAt, now))),
           <Text dimColor>{`${compact(google.sessionTokens)} tokens en esta sesión${age !== undefined && google.quotas.length > 0 ? ` · cuota de hace ${age} min` : ''}`}</Text>,
         )}
@@ -667,9 +691,14 @@ export const register: Register = on => {
         )}
         {section(
           'Atajos',
-          <Box flexDirection="column" gap={1}>
-            {QUICK.map(q => <Button key={q.key} label={q.label} onPress={() => void $.prompt.submit({ text: q.text }).catch(() => {})} />)}
-          </Box>,
+          QUICK.map(group => (
+            <Box flexDirection="column" marginBottom={1}>
+              <Text dimColor>{group.area}</Text>
+              <Box flexDirection="row" flexWrap="wrap" gap={1}>
+                {group.items.map(q => <Button key={`${group.area}-${q.label}`} label={q.label} onPress={() => void $.prompt.submit({ text: q.text }).catch(() => {})} />)}
+              </Box>
+            </Box>
+          )),
         )}
       </Box>
     )

@@ -22,7 +22,7 @@ export type CuadrillaAgent = {
 export type CuadrillaLimit = { kind: string; percentUsed: number; resetsAt?: string }
 
 export type GeminiQuota = { id: string; percentUsed: number; resetsAt?: string }
-export type GeminiState = { quotas: GeminiQuota[]; sessionTokens: number; seenAt?: number }
+export type GeminiState = { quotas: GeminiQuota[]; sessionTokens: number; seenAt?: number; note?: string }
 
 declare module 'claude-code' {
   interface PluginState {

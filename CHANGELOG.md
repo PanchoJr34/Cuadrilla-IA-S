@@ -1,5 +1,9 @@
 # Cambios
 
+## 0.5.2
+
+- 12 atajos por área y diagnóstico de la cuota de Gemini en el panel.
+
 ## 0.5.1
 
 - Detecta cambios sobre archivos que ya estaban modificados.
