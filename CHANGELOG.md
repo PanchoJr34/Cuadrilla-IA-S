@@ -1,5 +1,9 @@
 # Cambios
 
+## 0.6.1
+
+- Conserva la última cuota de Gemini y muestra sus límites con nombres claros.
+
 ## 0.6.0
 
 - Modelo automático por turno en Claude Code, con botón y `/cuadrilla-auto`.

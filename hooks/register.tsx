@@ -265,8 +265,14 @@ const refreshGeminiQuota = async ($: EngineInterface) => {
   const quotas: GeminiQuota[] = Object.entries(data.quota ?? {}).flatMap(([id, q]) =>
     typeof q.remaining_fraction === 'number' && !q.disabled ? [{ id, percentUsed: Math.round((1 - q.remaining_fraction) * 100), ...(q.reset_time ? { resetsAt: q.reset_time } : {}) }] : [],
   )
+  // Al abrir agy el archivo se escribe primero sin cuota: se conserva la última conocida.
+  if (quotas.length === 0) {
+    const saved = (await $.store.get('geminiQuota').catch(() => undefined)) as { quotas: GeminiQuota[]; seenAt: number } | undefined
+    return update($, gemini, state => ({ ...state, ...(saved ?? {}), note: saved ? '' : 'Abre agy y envía un mensaje para leer tu cuota.' }))
+  }
   const seenAt = await $.clock.now()
-  await update($, gemini, state => ({ ...state, quotas, seenAt, note: quotas.length > 0 ? '' : 'agy no informó cuota en este plan.' }))
+  await $.store.set('geminiQuota', { quotas, seenAt }).catch(() => {})
+  await update($, gemini, state => ({ ...state, quotas, seenAt, note: '' }))
 }
 
 const projectFiles = async ($: EngineInterface, cwd: string) => {
@@ -494,7 +500,11 @@ const resetIn = (resetsAt: string | undefined, now: number) => {
 
 const compact = (n: number) => (n >= 1_000_000 ? `${(n / 1_000_000).toFixed(1)} M` : n >= 1000 ? `${Math.round(n / 1000)} k` : String(n))
 
-const quotaName = (id: string) => id.replace(/[-_]/g, ' ').replace(/\bweekly\b/i, 'semana').replace(/\b(5h|five hour)\b/i, '5 horas').replace(/^./, c => c.toUpperCase())
+const quotaName = (id: string) => {
+  const group = id.startsWith('3p') ? 'Otros modelos' : /argon/i.test(id) ? 'Argon' : 'Gemini'
+  const span = /5h/i.test(id) ? '5 horas' : /weekly/i.test(id) ? 'semana' : id
+  return `${group} · ${span}`
+}
 
 const QUICK: { area: string; items: { label: string; text: string }[] }[] = [
   { area: 'Proyecto', items: [
@@ -699,7 +709,7 @@ export const register: Register = on => {
           <Text bold color={BLUE}>Gemini</Text>,
           google.quotas.length === 0
             ? <Text dimColor>{google.note || 'Buscando tu cuota…'}</Text>
-            : google.quotas.map(q => bar(quotaName(q.id), q.percentUsed, resetIn(q.resetsAt, now))),
+            : google.quotas.filter(q => !q.id.startsWith('3p') || q.percentUsed > 0).sort((a, b) => Number(/weekly/i.test(a.id)) - Number(/weekly/i.test(b.id))).map(q => bar(quotaName(q.id), q.percentUsed, resetIn(q.resetsAt, now))),
           <Text dimColor>{`${compact(google.sessionTokens)} tokens en esta sesión${age !== undefined && google.quotas.length > 0 ? ` · cuota de hace ${age} min` : ''}`}</Text>,
         )}
         {section(
