@@ -1,5 +1,9 @@
 # Cambios
 
+## 1.0.3
+
+- Los informes largos de Gemini ya no se cortan: se leen por partes y Claude recibe aviso cuando falta texto.
+
 ## 1.0.2
 
 - Los agentes de solo lectura ya no se marcan como fallidos cuando Claude o tú cambian archivos mientras trabajan; ahora es un aviso. Solo fallan si el agente intentó editar.

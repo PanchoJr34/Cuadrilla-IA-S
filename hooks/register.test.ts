@@ -351,3 +351,17 @@ test('en solo lectura, si el agente usa una herramienta de edición y cambian ar
   expect(String((await $.tool.call({ tool: TOOL, action: 'result', id })).result)).toContain('solo lectura cambió archivos con write_file: app.ts')
   expect(s.submitted[0]).toContain('falló')
 })
+
+test('un informe largo se lee por partes sin perder texto', async ($, on) => {
+  const long = 'x'.repeat(25_000) + 'FINAL'
+  const stream = JSON.stringify({ event: 'result', result: { response: long, status: 'SUCCESS' } }) + '\n'
+  const s = await setup($, on, { stream })
+  const id = idOf((await $.tool.call({ tool: TOOL, task: 'Lee' })).result)
+  await settle(); s.release(); await settle()
+  const first = String((await $.tool.call({ tool: TOOL, action: 'result', id })).result)
+  expect(first).toContain('Informe incompleto')
+  const offset = Number(/offset (\d+)/.exec(first)?.[1])
+  const rest = String((await $.tool.call({ tool: TOOL, action: 'result', id, offset })).result)
+  expect(rest).toContain('FINAL')
+  expect(rest).not.toContain('Informe incompleto')
+})

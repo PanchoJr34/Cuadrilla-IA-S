@@ -1,6 +1,6 @@
 {
   "name": "cuadrilla",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "Multi-agent Claude Code plugin for Windows and macOS: Claude and Gemini teams, 101 skills, model routing and isolated worktrees for web, design and marketing.",
   "author": {
     "name": "PanchoJr34",
