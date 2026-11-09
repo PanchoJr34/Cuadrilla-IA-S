@@ -187,6 +187,8 @@ const fitFiles = (input: DelegateInput, files: string[]) => {
 
 const usedTokens = (ev: Record<string, any>) => Number(ev.usage?.total_tokens ?? ev.result?.usage?.total_tokens ?? 0)
 
+const EDIT_TOOL = /write|edit|replace|create|delete|remove|move|rename|patch/i
+
 const readLine = (line: string): StreamFact => {
   let ev: Record<string, any>
   try {
@@ -329,7 +331,10 @@ const runAgent = async ($: EngineInterface, id: string, input: DelegateInput, pr
   let error = ''
   let stderr = ''
   let code: number | null = null
+  // Herramientas de edición que el agente intentó usar; en solo lectura agy las niega.
+  const editTools = new Set<string>()
   const apply = async (fact: StreamFact) => {
+    if (fact.doing && EDIT_TOOL.test(fact.doing)) editTools.add(oneLine(fact.doing, 60))
     if (fact.text) streamed = (streamed + fact.text).slice(-MAX_STREAM)
     if (fact.finalText) finalText = fact.finalText
     if (fact.tokens) await update($, gemini, state => ({ ...state, sessionTokens: state.sessionTokens + (fact.tokens ?? 0) }))
@@ -376,19 +381,22 @@ const runAgent = async ($: EngineInterface, id: string, input: DelegateInput, pr
   const changed = input.write === true ? (after ?? []) : [...(after ?? []).filter(f => !(before ?? []).includes(f)), ...touched]
   const projectAfter = input.write === true ? await changedFiles($, projectDir) : undefined
   const escaped = (projectAfter ?? []).filter(f => !(projectBefore ?? []).includes(f))
-  // Claude o la persona pueden editar el proyecto a la vez: un cambio fuera de la copia es un aviso, no un fallo.
-  const broke = input.write !== true && changed.length > 0
+  // Claude o la persona pueden editar el proyecto a la vez: un cambio que el agente no hizo es un aviso, no un fallo.
+  // En solo lectura solo falla si el agente usó una herramienta de edición y además cambiaron archivos.
+  const broke = input.write !== true && changed.length > 0 && editTools.size > 0
+  const concurrent = input.write === true ? escaped : broke ? [] : changed
   const failed = error !== '' || (code !== null && code !== 0) || report === '' || broke
   const problem = broke
-    ? `un agente de solo lectura cambió archivos: ${changed.join(', ')}`
+    ? `un agente de solo lectura cambió archivos con ${[...editTools].join(', ')}: ${changed.join(', ')}`
     : error || (code !== null && code !== 0 ? `salió con código ${code}: ${oneLine(stderr, 300)}` : report === '' ? 'terminó sin informe' : '')
+  const mine = input.write === true || broke ? changed : []
   const denied = stderr.split('\n').filter(l => /denied|permission|approval/i.test(l)).slice(-5)
   const text = `# ${me?.label ?? id}
 
 - Estado: ${wasStopped ? 'detenido' : failed ? 'falló' : 'terminó'}
 - Modelo: ${input.model ?? 'predeterminado de agy'}
 - Modo: ${input.write === true ? `escritura aislada en ${me?.worktree}, rama ${me?.branch}` : 'solo lectura'}
-${problem ? `- Problema: ${problem}\n` : ''}${changed.length > 0 ? `- Archivos cambiados: ${changed.join(', ')}\n` : ''}${escaped.length > 0 ? `- Aviso: durante el trabajo también cambiaron archivos del proyecto principal (${escaped.join(', ')}). Pueden ser tuyos o de Claude; revísalos antes de integrar.\n` : ''}${denied.length > 0 ? `- Acciones negadas:\n${denied.map(l => `  - ${oneLine(l, 500)}`).join('\n')}\n` : ''}
+${problem ? `- Problema: ${problem}\n` : ''}${mine.length > 0 ? `- Archivos cambiados: ${mine.join(', ')}\n` : ''}${concurrent.length > 0 ? `- Aviso: mientras trabajaba cambiaron archivos del proyecto principal que el agente no tocó (${concurrent.join(', ')}). Seguramente fueron Claude o tú. ${input.write === true ? 'Revísalos antes de integrar.' : 'Si el informe habla de esos archivos, pudo leer una versión anterior.'}\n` : ''}${denied.length > 0 ? `- Acciones negadas:\n${denied.map(l => `  - ${oneLine(l, 500)}`).join('\n')}\n` : ''}
 ## Tarea
 ${input.task}
 
@@ -396,7 +404,7 @@ ${input.task}
 ${report || '(sin informe)'}
 `
   await $.fs.write(reportPath, text).catch(() => {})
-  await patch($, id, { state: wasStopped ? 'stopped' : failed ? 'failed' : 'done', doing: wasStopped ? 'detenido' : failed ? oneLine(problem, 80) : 'terminó', report: reportPath, changed, ...(problem ? { problem } : {}) })
+  await patch($, id, { state: wasStopped ? 'stopped' : failed ? 'failed' : 'done', doing: wasStopped ? 'detenido' : failed ? oneLine(problem, 80) : concurrent.length > 0 ? 'terminó · con aviso' : 'terminó', report: reportPath, changed: mine, ...(problem ? { problem } : {}) })
   await showStatus($)
   // Solo un aviso: el contenido del informe nunca entra al chat como mensaje.
   await $.prompt.submit({ text: `cuadrilla: el agente "${me?.label ?? id}" ${wasStopped ? 'se detuvo' : failed ? 'falló' : 'terminó'}. Lee su informe con ${TOOL}, action "result", id "${id}".` })
@@ -720,6 +728,8 @@ export const register: Register = on => {
     )
     const recent = [...list].sort((a, b) => importance[a.state] - importance[b.state]).slice(0, 5)
     const age = google.seenAt ? Math.max(0, Math.round((now - google.seenAt) / 60_000)) : undefined
+    // agy solo actualiza la cuota en su pantalla interactiva; los agentes de Cuadrilla corren sin ella.
+    const stale = age !== undefined && age > 60
     return (
       <Box flexDirection="column">
         <Box flexDirection="column" marginBottom={1}>
@@ -735,7 +745,8 @@ export const register: Register = on => {
           google.quotas.length === 0
             ? <Text dimColor>{google.note || 'Buscando tu cuota…'}</Text>
             : google.quotas.filter(q => !q.id.startsWith('3p') || q.percentUsed > 0).sort((a, b) => Number(/weekly/i.test(a.id)) - Number(/weekly/i.test(b.id))).map(q => bar(quotaName(q.id), q.percentUsed, resetIn(q.resetsAt, now))),
-          <Text dimColor>{`${compact(google.sessionTokens)} tokens en esta sesión${age !== undefined && google.quotas.length > 0 ? ` · cuota de hace ${age} min` : ''}`}</Text>,
+          stale && google.quotas.length > 0 ? <Text color={AMBER}>{`Cuota de hace ${age < 1440 ? `${Math.round(age / 60)} h` : `${Math.round(age / 1440)} d`}. Para refrescarla abre agy en una terminal y envía un mensaje.`}</Text> : null,
+          <Text dimColor>{`${compact(google.sessionTokens)} tokens de Gemini en esta sesión${age !== undefined && !stale && google.quotas.length > 0 ? ` · cuota de hace ${age} min` : ''}`}</Text>,
         )}
         {section(
           'Modelo',

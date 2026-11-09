@@ -104,14 +104,15 @@ test('sin repositorio, escritura se niega y no lanza nada', async ($, on) => {
   expect(s.spawned).toHaveLength(0)
 })
 
-test('si un agente de solo lectura cambia algo, falla', async ($, on) => {
+test('en solo lectura, cambios hechos por Claude a la vez son un aviso', async ($, on) => {
   let calls = 0
   const s = await setup($, on, { git: a => ({ exitCode: 0, stdout: a[3] === 'status' && ++calls > 1 ? ' M secreto.ts\0' : '', stderr: '' }) })
   const id = idOf((await $.tool.call({ tool: TOOL, task: 'Lee' })).result)
   await settle(); s.release(); await settle()
   const read = String((await $.tool.call({ tool: TOOL, action: 'result', id })).result)
-  expect(read).toContain('solo lectura cambió archivos: secreto.ts')
-  expect(s.submitted[0]).toContain('falló')
+  expect(read).toContain('Aviso: mientras trabajaba cambiaron archivos')
+  expect(read).toContain('secreto.ts')
+  expect(s.submitted[0]).toContain('terminó')
 })
 
 test('si agy no existe, el error dice qué hacer', async ($, on) => {
@@ -254,7 +255,7 @@ test('cambios en el proyecto principal son aviso, no fallo', async ($, on) => {
   const id = idOf((await $.tool.call({ tool: TOOL, task: 'Edita', write: true, role: 'gemini-frontend' })).result)
   await settle(); s.release(); await settle()
   const read = String((await $.tool.call({ tool: TOOL, action: 'result', id })).result)
-  expect(read).toContain('también cambiaron archivos del proyecto principal')
+  expect(read).toContain("cambiaron archivos del proyecto principal que el agente no tocó")
   expect(read).toContain('Estado: terminó')
 })
 
@@ -285,7 +286,7 @@ test('detecta cambios sobre archivos que ya estaban modificados', async ($, on) 
   const s = await setup($, on, { git: a => ({ exitCode: 0, stdout: a[3] === 'status' ? ' M app.ts\0' : a[3] === 'hash-object' ? (++hashes === 1 ? 'aaa\n' : 'bbb\n') : '', stderr: '' }) })
   const id = idOf((await $.tool.call({ tool: TOOL, task: 'Lee' })).result)
   await settle(); s.release(); await settle()
-  expect(String((await $.tool.call({ tool: TOOL, action: 'result', id })).result)).toContain('solo lectura cambió archivos: app.ts')
+  expect(String((await $.tool.call({ tool: TOOL, action: 'result', id })).result)).toContain('Aviso: mientras trabajaba cambiaron archivos del proyecto principal que el agente no tocó (app.ts)')
 })
 
 test('limpia el nombre visible del agente', async ($, on) => {
@@ -339,4 +340,14 @@ test('el modelo ignora lo que Claude Code agrega al turno', async ($, on) => {
     for await (const _ of $.turn.step({ turnId: 'x', index: 0, model: 'claude-opus-5-5', effort: 'medium' } as never)) void _
   } catch {}
   expect(seen).toEqual(['haiku'])
+})
+
+test('en solo lectura, si el agente usa una herramienta de edición y cambian archivos, falla', async ($, on) => {
+  let calls = 0
+  const stream = [JSON.stringify({ step_update: { tool_name: 'write_file', state: 'ACTIVE' } }), JSON.stringify({ event: 'result', result: { response: 'listo', status: 'SUCCESS' } })].join('\n') + '\n'
+  const s = await setup($, on, { stream, git: a => ({ exitCode: 0, stdout: a[3] === 'status' && ++calls > 1 ? ' M app.ts\0' : '', stderr: '' }) })
+  const id = idOf((await $.tool.call({ tool: TOOL, task: 'Lee' })).result)
+  await settle(); s.release(); await settle()
+  expect(String((await $.tool.call({ tool: TOOL, action: 'result', id })).result)).toContain('solo lectura cambió archivos con write_file: app.ts')
+  expect(s.submitted[0]).toContain('falló')
 })

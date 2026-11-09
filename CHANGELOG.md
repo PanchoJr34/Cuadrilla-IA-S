@@ -1,5 +1,10 @@
 # Cambios
 
+## 1.0.2
+
+- Los agentes de solo lectura ya no se marcan como fallidos cuando Claude o tú cambian archivos mientras trabajan; ahora es un aviso. Solo fallan si el agente intentó editar.
+- El panel avisa cuando la cuota de Gemini está desactualizada y explica cómo refrescarla.
+
 ## 1.0.1
 
 - Los cambios del proyecto principal durante un trabajo de Gemini ya no lo marcan como fallido.
