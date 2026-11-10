@@ -242,7 +242,7 @@ Mira capacidad, modelo, agentes y trabajos sin salir de Claude Code.
 - **Trabajos:** estado, modelo elegido y motivo de cada encargo.
 - **Trabajar en:** elige Desarrollo, Diseño, Marketing, Contenido, Negocio o Seguridad, y lanza una de sus 34 acciones.
 
-La cuota de Gemini proviene de Antigravity y se actualiza cuando usas `agy` en modo interactivo. Si el panel la pide, abre `agy` un momento. El dato puede tener un retraso.
+La cuota de Gemini proviene de Antigravity y solo se actualiza cuando usas `agy` en su pantalla normal; los agentes de Cuadrilla trabajan en segundo plano y no la refrescan. Si tiene más de una hora, el panel te lo indica: abre `agy`, envía un mensaje corto y ciérralo. Los tokens de Gemini de la sesión sí se cuentan en vivo.
 
 ## Elección inteligente de modelo
 
@@ -485,6 +485,8 @@ Cierra Claude Code, revisa qué cambió y corre:
 git -C "$HOME\Cuadrilla-IA-S" pull; cmd /c "$HOME\Cuadrilla-IA-S\instalar.cmd"
 ```
 
+Luego abre Claude Code. Si ya estaba abierto, escribe `/reload-plugins` o, en VS Code, usa `Developer: Reload Window`.
+
 ### Desinstalar
 
 Cierra Claude Code y corre:
@@ -504,7 +506,8 @@ Los plugins oficiales se quitan aparte con `claude plugin uninstall <plugin>@<ma
 - Corren hasta 3 trabajos de Gemini a la vez.
 - Recibe hasta 300 nombres de archivo y cada tarea admite hasta 20,000 caracteres.
 - Un trabajo se detiene tras 10 minutos sin actividad o 45 minutos en total.
-- La solo lectura se comprueba en repositorios Git: detecta cambios, pero no garantiza impedirlos.
+- En solo lectura, Antigravity niega las ediciones. Si mientras tanto Claude o tú cambian archivos, el trabajo termina con un aviso, no con un fallo.
+- Los informes muy largos se entregan por partes; Claude pide el resto automáticamente.
 
 ## Problemas comunes
 
@@ -515,6 +518,8 @@ Los plugins oficiales se quitan aparte con `claude plugin uninstall <plugin>@<ma
 | No aparecen los agentes de Gemini | Corre `verificar.cmd` (en Mac, `verificar.sh`) y luego `agy agents` |
 | Aparece un momento una ventana de consola | Es normal al lanzar procesos de Windows; se cierra sola |
 | Gemini termina sin informe | Quita pasos que requieran comandos y lánzalo otra vez |
+| Un trabajo dice "terminó · con aviso" | Otros cambiaron archivos mientras Gemini trabajaba; revisa el aviso del informe antes de integrar |
+| La cuota de Gemini no cambia | Abre `agy`, envía un mensaje corto y ciérralo |
 | El panel no aparece | Escribe `/cuadrilla` |
 
 ## Desarrollo

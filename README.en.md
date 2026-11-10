@@ -147,6 +147,8 @@ Review the changes first, then run:
 git -C "$HOME\Cuadrilla-IA-S" pull; cmd /c "$HOME\Cuadrilla-IA-S\instalar.cmd"
 ```
 
+If Claude Code is already open, type `/reload-plugins` or, in VS Code, run `Developer: Reload Window`.
+
 ## Uninstall
 
 ```powershell
@@ -160,7 +162,9 @@ Remove-Item "$HOME\Cuadrilla-IA-S" -Recurse -Force
 
 - Gemini agents have no terminal: they do not run tests, builds or installs.
 - Up to 3 Gemini jobs run at once.
-- Read-only mode detects changes in Git repositories, but cannot guarantee it prevents them.
+- In read-only mode Antigravity denies edits. If you or Claude change files meanwhile, the job ends with a warning, not a failure.
+- Long reports are delivered in parts; Claude asks for the rest.
+- Gemini quota only refreshes when you use `agy` interactively. The panel flags it when it is older than an hour: open `agy`, send a short message and close it.
 
 ## Security and privacy
 

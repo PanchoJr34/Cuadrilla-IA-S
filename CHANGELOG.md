@@ -1,5 +1,10 @@
 # Cambios
 
+## 1.0.4
+
+- Icono del plugin para el directorio de plugins.
+- README: cómo refrescar la cuota de Gemini, qué significa "terminó · con aviso" y recarga con `/reload-plugins`.
+
 ## 1.0.3
 
 - Los informes largos de Gemini ya no se cortan: se leen por partes y Claude recibe aviso cuando falta texto.
