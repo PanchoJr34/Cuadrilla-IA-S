@@ -14,9 +14,9 @@
 
 </div>
 
-| 🤖 Agentes | 🧠 Skills | 🗂️ Áreas | ⚡ Acciones | 🌎 Idiomas |
+| AGENTES | SKILLS | ÁREAS | ACCIONES | IDIOMAS |
 | :--: | :--: | :--: | :--: | :--: |
-| **15** | **101** | **6** | **34** | **ES + EN** |
+| **15** | **101** | **6** | **34** | **ES / EN** |
 
 ---
 

@@ -14,9 +14,9 @@
 
 </div>
 
-| 🤖 Agents | 🧠 Skills | 🗂️ Work areas | ⚡ Actions | 🌎 Languages |
+| AGENTS | SKILLS | WORK AREAS | ACTIONS | LANGUAGES |
 | :--: | :--: | :--: | :--: | :--: |
-| **15** | **101** | **6** | **34** | **ES + EN** |
+| **15** | **101** | **6** | **34** | **ES / EN** |
 
 ---
 
