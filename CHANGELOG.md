@@ -18,9 +18,6 @@
 
 - Los cambios del proyecto principal durante un trabajo de Gemini ya no lo marcan como fallido.
 - Oculta cuotas de Gemini ya reiniciadas.
-
-## Sin publicar
-
 - Instalador y verificador para macOS (`instalar.sh`, `verificar.sh`) y activación de la cuota de Gemini en Mac (`gemini/activar-cuota.sh`).
 - README con la sección "Instalar en macOS" y las versiones compatibles.
 
